@@ -31,7 +31,11 @@
   "devDependencies": {
     "@rookie/eslint-config": "workspace:*",
     "@rookie/tsconfig": "workspace:*",
+    "@testing-library/react-native": "^14.0.1",
+    "@types/jest": "29.5.14",
     "@types/react": "~19.2.2",
+    "jest": "~29.7.0",
+    "jest-expo": "~57.0.1",
     "typescript": "~6.0.3"
   },
   "scripts": {
@@ -43,7 +47,12 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "lint": "expo lint",
-    "typecheck": "tsc --noEmit -p tsconfig.json"
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "jest --config ./jest.config.cjs --selectProjects mobile-unit --passWithNoTests",
+    "test:watch": "jest --config ./jest.config.cjs --selectProjects mobile-unit --watch --passWithNoTests",
+    "test:unit": "jest --config ./jest.config.cjs --selectProjects mobile-unit --passWithNoTests",
+    "test:integration": "jest --config ./jest.config.cjs --selectProjects mobile-integration --passWithNoTests",
+    "test:all": "jest --config ./jest.config.cjs --passWithNoTests"
   },
   "private": true
 }
