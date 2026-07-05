@@ -1,0 +1,105 @@
+# Dependencies
+node_modules/
+
+# Environment
+.env
+.env.*
+!.env.example
+.env*.local
+
+# Turbo
+.turbo/
+
+# Build output
+dist/
+build/
+out/
+coverage/
+.nyc_output/
+
+# Expo / React Native
+.expo/
+.expo-shared/
+web-build/
+expo-env.d.ts
+
+# Generated native projects (if using Expo Prebuild)
+ios/
+android/
+
+# Native build artifacts
+.kotlin/
+ios/Pods/
+ios/build/
+android/.gradle/
+android/build/
+android/app/build/
+
+# Metro
+.metro-health-check*
+
+# TypeScript
+*.tsbuildinfo
+
+# Runtime / temp
+tmp/
+temp/
+.tmp/
+.temp/
+pids/
+*.pid
+*.pid.lock
+*.seed
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Firebase
+.firebase/
+firebase-debug.log
+
+# Playwright
+playwright-report/
+test-results/
+
+# IDEs
+.idea/
+.project
+.classpath
+.c9/
+.settings/
+*.launch
+*.sublime-workspace
+
+# VS Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# macOS
+.DS_Store
+
+# Local databases
+*.sqlite
+*.db
+
+# Certificates / signing
+*.jks
+*.p8
+*.p12
+*.key
+*.pem
+*.mobileprovision
+
+# Misc
+.vercel/
+report.*.*.*.*.json
+*.orig.*
