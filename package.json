@@ -7,8 +7,10 @@
     "dev": "turbo run dev",
     "build": "turbo run build",
     "lint": "turbo run lint",
-    "test": "turbo run test"
+    "test": "turbo run test",
+    "typecheck": "turbo run typecheck"
   },
+  "private": true,
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -21,6 +23,7 @@
   },
   "type": "module",
   "devDependencies": {
+    "eslint": "^9.39.4",
     "turbo": "^2.10.3"
   }
 }

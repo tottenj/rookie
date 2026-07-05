@@ -1,5 +1,10 @@
 {
   "name": "@rookie/tsconfig",
   "version": "1.0.0",
-  "private": true
+  "private": true,
+  "exports": {
+    "./base": "./base.json",
+    "./react": "./react.json",
+    "./nest": "./nest.json"
+  }
 }
