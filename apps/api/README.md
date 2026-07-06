@@ -25,6 +25,43 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
+## Testing Structure
+
+Recommended layout for this API package:
+
+- Unit tests stay close to implementation in `src/**` as `*.spec.ts`.
+- Integration tests live in `__tests__/integration/**`.
+- End-to-end tests live in `__tests__/e2e/**`.
+
+The Jest config supports both this structure and the original Nest `test/**` paths during transition.
+
+## Local Database Commands
+
+Run from `apps/api`:
+
+```bash
+npm run db:dev:up
+npm run db:dev:down
+npm run db:test:up
+npm run db:test:down
+```
+
+## Integration Test Commands
+
+Run from `apps/api`:
+
+```bash
+npm run test:integration:setup
+npm run test:integration
+npm run test:integration:teardown
+```
+
+CI-style one-shot command:
+
+```bash
+npm run test:integration:ci
+```
+
 ## Project setup
 
 ```bash

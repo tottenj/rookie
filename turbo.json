@@ -21,8 +21,23 @@
     "test:integration": {
       "dependsOn": ["^test:integration"]
     },
+    "test:integration:api:ci": {
+      "cache": false
+    },
+    "db:api:dev:up": {
+      "cache": false
+    },
+    "db:api:dev:down": {
+      "cache": false
+    },
+    "db:api:test:up": {
+      "cache": false
+    },
+    "db:api:test:down": {
+      "cache": false
+    },
     "typecheck": {
       "dependsOn": ["^typecheck"]
-    }
+    } 
   }
 }

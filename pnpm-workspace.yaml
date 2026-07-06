@@ -2,4 +2,9 @@ packages:
   - apps/*
   - packages/*
 allowBuilds:
+  '@buoy-gg/events': true
+  '@buoy-gg/highlight-updates': true
+  '@buoy-gg/redux': true
+  '@buoy-gg/shared-ui': true
+  esbuild: true
   unrs-resolver: true

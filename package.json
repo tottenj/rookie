@@ -10,6 +10,12 @@
     "test": "turbo run test",
     "test:unit": "turbo run test:unit",
     "test:integration": "turbo run test:integration",
+    "test:integration:api": "pnpm --filter @rookie/api run test:integration",
+    "test:integration:api:ci": "pnpm --filter @rookie/api run test:integration:ci",
+    "db:api:dev:up": "pnpm --filter @rookie/api run db:dev:up",
+    "db:api:dev:down": "pnpm --filter @rookie/api run db:dev:down",
+    "db:api:test:up": "pnpm --filter @rookie/api run db:test:up",
+    "db:api:test:down": "pnpm --filter @rookie/api run db:test:down",
     "typecheck": "turbo run typecheck"
   },
   "private": true,
