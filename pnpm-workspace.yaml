@@ -6,5 +6,7 @@ allowBuilds:
   '@buoy-gg/highlight-updates': true
   '@buoy-gg/redux': true
   '@buoy-gg/shared-ui': true
+  '@firebase/util': true
   esbuild: true
+  protobufjs: true
   unrs-resolver: true

@@ -1,0 +1,24 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:17
+    container_name: rookie-api-test
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: tester
+      POSTGRES_DB: rookie_api_test
+    ports:
+      - "5434:5432"
+    volumes:
+      - pgdata_api_test:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U test -d rookie_api_test"]
+      interval: 2s
+      timeout: 2s
+      retries: 15
+      start_period: 5s
+
+volumes:
+  pgdata_api_test:

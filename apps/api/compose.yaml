@@ -1,0 +1,24 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:17
+    container_name: rookie-api-dev
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: rookie
+      POSTGRES_PASSWORD: rookie_dev
+      POSTGRES_DB: rookie_api_dev
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata_api_dev:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U rookie -d rookie_api_dev"]
+      interval: 2s
+      timeout: 2s
+      retries: 15
+      start_period: 5s
+
+volumes:
+  pgdata_api_dev:

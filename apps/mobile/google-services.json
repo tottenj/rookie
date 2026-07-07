@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "570435129218",
+    "project_id": "rookie-a27a3",
+    "storage_bucket": "rookie-a27a3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:570435129218:android:5f1a556ddfa9ed4778899b",
+        "android_client_info": {
+          "package_name": "com.jtotssteam.rookie"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDaFdKrv3tgkH-4lw_7Uf_h3Ne_H4_asto"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
