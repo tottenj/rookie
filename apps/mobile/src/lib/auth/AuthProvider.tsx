@@ -1,5 +1,5 @@
+// AuthProvider.tsx — just tracks state, no splash logic
 import { getAuth, onAuthStateChanged, User } from "@react-native-firebase/auth";
-import { SplashScreen } from "expo-router";
 import { createContext, PropsWithChildren, useContext, useEffect, useState } from "react";
 
 type AuthContextValue = {
@@ -17,28 +17,14 @@ export function AuthProvider({ children }: PropsWithChildren) {
     return onAuthStateChanged(getAuth(), (user) => {
       setUser(user);
       setLoading(false);
-
-      SplashScreen.hideAsync();
     });
   }, []);
 
-  return (
-    <AuthContext.Provider
-      value={{
-        user,
-        loading,
-      }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={{ user, loading }}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {
   const context = useContext(AuthContext);
-
-  if (!context) {
-    throw new Error("useAuth must be inside AuthProvider");
-  }
-
+  if (!context) throw new Error("useAuth must be inside AuthProvider");
   return context;
 }

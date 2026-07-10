@@ -4,7 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 
 //import { UserRepository } from "@/api/user.repository";
 import { EmailSignUpSchema } from "@rookie/shared-types";
-import { AuthRepository } from "../../../../api/auth/auth.repository";
+import { AuthRepository } from "../../../../../api/auth/auth.repository";
 
 export function useSignUp() {
   return useMutation({
