@@ -16,7 +16,10 @@
     "db:api:dev:down": "pnpm --filter @rookie/api run db:dev:down",
     "db:api:test:up": "pnpm --filter @rookie/api run db:test:up",
     "db:api:test:down": "pnpm --filter @rookie/api run db:test:down",
-    "typecheck": "turbo run typecheck"
+    "typecheck": "turbo run typecheck",
+    "firebase": "firebase",
+    "emulators": "firebase emulators:start",
+    "emulators:persist": "firebase emulators:start --import=firebase/data --export-on-exit=firebase/data"
   },
   "private": true,
   "keywords": [],
@@ -32,6 +35,7 @@
   "type": "module",
   "devDependencies": {
     "eslint": "^9.39.4",
+    "firebase-tools": "^15.23.0",
     "turbo": "^2.10.3"
   }
 }
