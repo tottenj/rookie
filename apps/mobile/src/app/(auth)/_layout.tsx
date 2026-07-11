@@ -10,5 +10,5 @@ export default function AuthLayout() {
   );
 }
 export const unstable_settings = {
-  anchor: "signin", 
+  anchor: "signin",
 };

@@ -1,7 +1,10 @@
-import { View } from "react-native";
+import { EmailAuthScreen } from "@/features/auth/components/EmailAuthScreen";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function signup() {
+export default function Signup() {
   return (
-    <View></View>
-  )
+    <SafeAreaView style={{ flex: 1 }}>
+      <EmailAuthScreen signup={true} />
+    </SafeAreaView>
+  );
 }
