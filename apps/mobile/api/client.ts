@@ -9,7 +9,7 @@ export const apiClient = axios.create({
 apiClient.interceptors.request.use(async (config) => {
   const user = getAuth().currentUser;
   if (user) {
-    const idToken = await user.getIdToken(true); // Firebase SDK auto-refreshes if stale
+    const idToken = await user.getIdToken(); // Firebase SDK auto-refreshes if stale
     config.headers.Authorization = `Bearer ${idToken}`;
   }
   return config;

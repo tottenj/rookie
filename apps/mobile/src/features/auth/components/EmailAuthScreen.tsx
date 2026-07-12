@@ -21,20 +21,14 @@ export function EmailAuthScreen({ signup = false }: { signup?: boolean }) {
     mode: "onBlur",
   });
 
-  const { signUp, isLoading: isSignUpLoading, error: signUpError } = useSignUp();
-  const { signIn, isLoading: isSignInLoading, error: signInError } = useSignIn();
+  const { signUp, isLoading: isSignUpLoading, errorMessage: signUpErrorMessage } = useSignUp();
+  const { signIn, isLoading: isSignInLoading, errorMessage: signInErrorMessage } = useSignIn();
 
   const isLoading = signup ? isSignUpLoading : isSignInLoading;
-  const authError = signup ? signUpError : signInError;
+  const authErrorMessage = signup ? signUpErrorMessage : signInErrorMessage;
 
   function onSubmit(data: EmailSignUpSchema) {
-    if (signup) {
-      console.log("signing up with data:", data);
-      signUp(data);
-      return;
-    }
-
-    signIn(data);
+    signup ? signUp(data) : signIn(data);
   }
 
   return (
@@ -109,7 +103,7 @@ export function EmailAuthScreen({ signup = false }: { signup?: boolean }) {
           <AppButtonLabel>{signup ? "Sign Up" : "Sign In"}</AppButtonLabel>
         </AppButton>
 
-        {authError instanceof Error ? <AppParagraph className="text-red-500">{authError.message}</AppParagraph> : null}
+        {authErrorMessage ? <AppParagraph className="text-red-500">{authErrorMessage}</AppParagraph> : null}
 
         <View className="flex-row items-center justify-center gap-2">
           <Link replace href={signup ? "/(auth)/signin" : "/(auth)/signup"} className="font-semibold text-primary">

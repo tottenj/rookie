@@ -1,5 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { AuthRepository } from "../../../../../api/auth/auth.repository";
+import { mapAuthError } from "@/lib/errors/mapAuthErrors";
 
 export function useSignIn() {
   const mutation = useMutation({
@@ -11,5 +12,6 @@ export function useSignIn() {
     signInAsync: mutation.mutateAsync,
     isLoading: mutation.isPending,
     error: mutation.error,
+    errorMessage: mapAuthError(mutation.error),
   };
 }
