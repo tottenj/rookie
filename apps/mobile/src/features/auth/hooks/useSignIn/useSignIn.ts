@@ -1,6 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
-import { AuthRepository } from "../../../../../api/auth/auth.repository";
+
 import { mapAuthError } from "@/lib/errors/mapAuthErrors";
+import { AuthRepository } from "@/lib/repositories/authRepository/auth.repository";
 
 export function useSignIn() {
   const mutation = useMutation({

@@ -7,9 +7,10 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { LogBox, Platform, useColorScheme, View } from "react-native";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { FloatingDevTools } from "@buoy-gg/core";
-import { AuthProvider } from "@/lib/auth/AuthProvider";
+
 import RootNavigator from "@/components/navigators/rootNavigator/RootNavigator";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { AuthProvider } from "@/lib/providers/authProvider/AuthProvider";
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
 

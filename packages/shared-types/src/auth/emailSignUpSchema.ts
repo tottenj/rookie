@@ -1,8 +1,7 @@
 import { z } from "zod";
+import { emailSignInSchema } from "./emailSignInSchema";
 
-export const emailSignUpSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
+export const emailSignUpSchema = emailSignInSchema.extend({
   confirmPassword: z.string().min(8),
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords do not match",

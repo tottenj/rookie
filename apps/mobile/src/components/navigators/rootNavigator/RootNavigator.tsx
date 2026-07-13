@@ -1,10 +1,9 @@
 // RootNavigator.tsx
-import { useAuth } from "@/lib/auth/AuthProvider";
+import { useAuth } from "@/lib/providers/authProvider/AuthProvider";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-
 
 export default function RootNavigator() {
   const { user, loading } = useAuth();
@@ -21,12 +20,12 @@ export default function RootNavigator() {
 
   return (
     <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Protected guard={!!user}>
-          <Stack.Screen name="(app)" />
-        </Stack.Protected>
-        <Stack.Protected guard={!user}>
-          <Stack.Screen name="(auth)" />
-        </Stack.Protected>
+      <Stack.Protected guard={!!user}>
+        <Stack.Screen name="(app)" />
+      </Stack.Protected>
+      <Stack.Protected guard={!user}>
+        <Stack.Screen name="(auth)" />
+      </Stack.Protected>
     </Stack>
   );
 }

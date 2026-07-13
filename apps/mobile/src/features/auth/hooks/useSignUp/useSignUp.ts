@@ -1,14 +1,14 @@
 // apps/mobile/features/auth/hooks/useSignUp.ts
 import { useMutation } from "@tanstack/react-query";
-import { AuthRepository } from "../../../../../api/auth/auth.repository";
-import { EmailSignUpSchema } from "@rookie/shared-types";
-import { UsersRepository } from "@/lib/repositories/UserRepository";
+import { EmailSignUpSchema } from "@rookie/shared-types";;
 import { mapAuthError } from "@/lib/errors/mapAuthErrors";
+import { AuthRepository } from "@/lib/repositories/authRepository/auth.repository";
+import { UsersRepository } from "@/lib/repositories/userRepository/UserRepository";
 
 export function useSignUp() {
   const mutation = useMutation({
     mutationFn: async (data: EmailSignUpSchema) => {
-      const firebaseUser = await AuthRepository.signUp(data);
+      const firebaseUser = await AuthRepository.signUp({email: data.email, password: data.password});
       try{
         const profile = await UsersRepository.create({ uid: firebaseUser.uid, email: firebaseUser.email });
         return { firebaseUser, profile };
