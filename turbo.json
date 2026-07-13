@@ -10,7 +10,7 @@
       "outputs": ["dist/**"]
     },
     "lint": {
-      "dependsOn": ["^lint"]
+      "dependsOn": ["^lint", "^build"]
     },
     "test": {
       "dependsOn": ["^test"]
@@ -38,6 +38,6 @@
     },
     "typecheck": {
       "dependsOn": ["^typecheck"]
-    } 
+    }
   }
 }
