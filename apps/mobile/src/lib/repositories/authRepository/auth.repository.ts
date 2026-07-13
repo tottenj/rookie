@@ -1,5 +1,5 @@
 // apps/mobile/api/auth.repository.ts
-import { EmailSignInSchema, EmailSignUpSchema } from "@rookie/shared-types";
+import { EmailSignInSchema } from "@rookie/shared-types";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "@react-native-firebase/auth";
 import { auth } from "../../../../lib/firebase/firebase";
 

@@ -1,7 +1,7 @@
 import "../global.css";
 
 import { HeroUINativeProvider } from "heroui-native";
-import { DarkTheme, DefaultTheme, Slot, Stack, ThemeProvider } from "expo-router";
+import { DarkTheme, DefaultTheme, ThemeProvider } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { LogBox, Platform, useColorScheme, View } from "react-native";

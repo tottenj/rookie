@@ -2,9 +2,8 @@ import { getApp } from "firebase-admin/app";
 import { getAuth } from "firebase-admin/auth";
 import { onRequest } from "firebase-functions/v2/https";
 
-const app = getApp()
+const app = getApp();
 const auth = getAuth(app);
-
 
 export const seed = onRequest(async (req, res) => {
   if (!process.env.FUNCTIONS_EMULATOR) {
@@ -17,8 +16,8 @@ export const seed = onRequest(async (req, res) => {
 
   const SEEDUSERS = [
     { email: "user1@example.com", password: "password1", uid: "uid1" },
-    { email: "user2@example.com", password: "password2", uid: "uid2" }
-  ]
+    { email: "user2@example.com", password: "password2", uid: "uid2" },
+  ];
 
   for (const user of SEEDUSERS) {
     await auth.createUser({
@@ -27,6 +26,6 @@ export const seed = onRequest(async (req, res) => {
       password: user.password,
     });
   }
-  
+
   res.send("Seed complete");
 });

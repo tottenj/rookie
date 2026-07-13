@@ -4,7 +4,7 @@ import { useSignUp } from "./useSignUp";
 import { AuthRepository } from "@/lib/repositories/authRepository/auth.repository";
 import { UsersRepository } from "@/lib/repositories/userRepository/UserRepository";
 import { mapAuthError } from "@/lib/errors/mapAuthErrors";
-import QueryClientWrapper, { createTestQueryClient } from "@/lib/test/utils/QueryClientWrapper";
+import QueryClientWrapper, { createTestQueryClient } from "../../../../lib/test/utils/QueryClientWrapper";
 import { QueryClient } from "@tanstack/react-query";
 
 jest.mock("@/lib/repositories/authRepository/auth.repository");
@@ -33,13 +33,10 @@ describe("useSignUp", () => {
     const firebaseUser = { uid: "123", email: validInput.email, delete: jest.fn() };
     mockedAuth.signUp.mockResolvedValue(firebaseUser as any);
     mockedUsers.create.mockResolvedValue({ uid: "123", email: validInput.email } as any);
-
     const { result } = await renderHook(() => useSignUp(), { wrapper: QueryClientWrapper });
-
     await act(async () => {
       await result.current.signUpAsync(validInput);
     });
-
     expect(mockedAuth.signUp).toHaveBeenCalledWith({ email: validInput.email, password: validInput.password });
     expect(mockedUsers.create).toHaveBeenCalledWith({ uid: "123", email: validInput.email });
     expect(firebaseUser.delete).not.toHaveBeenCalled();
@@ -47,13 +44,10 @@ describe("useSignUp", () => {
 
   it("does not attempt delete if signUp itself fails", async () => {
     mockedAuth.signUp.mockRejectedValue(new Error("bad credentials"));
-
     const { result } = await renderHook(() => useSignUp(), { wrapper: QueryClientWrapper });
-
     await act(async () => {
       await expect(result.current.signUpAsync(validInput)).rejects.toThrow("bad credentials");
     });
-
     expect(mockedUsers.create).not.toHaveBeenCalled();
   });
 
@@ -62,13 +56,10 @@ describe("useSignUp", () => {
     mockedAuth.signUp.mockResolvedValue(firebaseUser as any);
     const profileError = new Error("profile create failed");
     mockedUsers.create.mockRejectedValue(profileError);
-
     const { result } = await renderHook(() => useSignUp(), { wrapper: QueryClientWrapper });
-
     await act(async () => {
       await expect(result.current.signUpAsync(validInput)).rejects.toThrow(profileError);
     });
-
     expect(firebaseUser.delete).toHaveBeenCalledTimes(1);
   });
 
@@ -78,15 +69,11 @@ describe("useSignUp", () => {
     mockedAuth.signUp.mockResolvedValue(firebaseUser as any);
     const profileError = new Error("profile create failed");
     mockedUsers.create.mockRejectedValue(profileError);
-
     const consoleSpy = jest.spyOn(console, "error").mockImplementation(() => {});
-
     const { result } = await renderHook(() => useSignUp(), { wrapper: QueryClientWrapper });
-
     await act(async () => {
       await expect(result.current.signUpAsync(validInput)).rejects.toThrow(profileError);
     });
-
     expect(consoleSpy).toHaveBeenCalledWith("Failed to delete Firebase user:", deleteError);
     consoleSpy.mockRestore();
   });
@@ -94,13 +81,10 @@ describe("useSignUp", () => {
   it("wires errorMessage to mapAuthError with mutation error", async () => {
     mockedAuth.signUp.mockRejectedValue(new Error("boom"));
     mockedMapAuthError.mockReturnValue("Something went wrong");
-
     const { result } = await renderHook(() => useSignUp(), { wrapper: QueryClientWrapper });
-
     await act(async () => {
       await result.current.signUpAsync(validInput).catch(() => {});
     });
-
     await waitFor(() => expect(result.current.errorMessage).toBe("Something went wrong"));
     expect(mockedMapAuthError).toHaveBeenCalledWith(expect.any(Error));
   });

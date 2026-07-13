@@ -6,8 +6,10 @@ type AppButtonProps = ButtonRootProps & {
 };
 
 export default function AppButton({ isLoading = false, children, ...buttonProps }: AppButtonProps) {
+  const { isDisabled: buttonIsDisabled, ...restButtonProps } = buttonProps;
+
   return (
-    <Button {...(buttonProps as ButtonRootProps)} >
+    <Button {...restButtonProps} isDisabled={isLoading || Boolean(buttonIsDisabled)}>
       {isLoading ? (
         <View className="absolute inset-0 items-center justify-center">
           <Spinner />
@@ -18,8 +20,6 @@ export default function AppButton({ isLoading = false, children, ...buttonProps 
     </Button>
   );
 }
-
-
 
 type AppButtonLabelProps = ButtonLabelProps & {
   children: React.ReactNode;

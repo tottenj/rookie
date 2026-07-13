@@ -3,7 +3,6 @@ import { useAuth } from "@/lib/providers/authProvider/AuthProvider";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function RootNavigator() {
   const { user, loading } = useAuth();

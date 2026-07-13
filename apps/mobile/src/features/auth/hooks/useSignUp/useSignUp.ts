@@ -1,18 +1,19 @@
 // apps/mobile/features/auth/hooks/useSignUp.ts
-import { useMutation } from "@tanstack/react-query";
-import { EmailSignUpSchema } from "@rookie/shared-types";;
 import { mapAuthError } from "@/lib/errors/mapAuthErrors";
 import { AuthRepository } from "@/lib/repositories/authRepository/auth.repository";
 import { UsersRepository } from "@/lib/repositories/userRepository/UserRepository";
+import { useMutation } from "@tanstack/react-query";
+import { EmailSignUpSchema } from "@rookie/shared-types";
 
 export function useSignUp() {
   const mutation = useMutation({
     mutationFn: async (data: EmailSignUpSchema) => {
-      const firebaseUser = await AuthRepository.signUp({email: data.email, password: data.password});
-      try{
+      const firebaseUser = await AuthRepository.signUp({ email: data.email, password: data.password });
+
+      try {
         const profile = await UsersRepository.create({ uid: firebaseUser.uid, email: firebaseUser.email });
         return { firebaseUser, profile };
-      }catch (error) {
+      } catch (error) {
         await firebaseUser.delete().catch((deleteError) => {
           console.error("Failed to delete Firebase user:", deleteError);
         });

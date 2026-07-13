@@ -1,5 +1,5 @@
 import AppTextField from "@/components/inputs/AppTextField/AppTextField";
-import { Control, Controller, FieldValues, Path } from "react-hook-form";
+import { Control, Controller, Path } from "react-hook-form";
 
 interface HasPassword {
   password: string;
