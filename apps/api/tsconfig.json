@@ -2,6 +2,7 @@
   "extends": "@rookie/tsconfig/nest",
 
   "compilerOptions": {
+    "rootDir": "./src",
     "outDir": "./dist",
     "incremental": true
   }
