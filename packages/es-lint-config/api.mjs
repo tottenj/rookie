@@ -3,12 +3,13 @@ import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended"
 import globals from "globals";
 import tseslint from "typescript-eslint";
 
-export function createApiConfig(options = {}) {
+export function createApiConfig(options = {}, overrides = {}) {
   const { tsconfigRootDir } = options;
+  const { ignores = ["eslint.config.mjs"] } = overrides;
 
   return tseslint.config(
     {
-      ignores: ["eslint.config.mjs"],
+      ignores,
     },
     eslint.configs.recommended,
     ...tseslint.configs.recommendedTypeChecked,
@@ -31,7 +32,7 @@ export function createApiConfig(options = {}) {
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/no-floating-promises": "warn",
         "@typescript-eslint/no-unsafe-argument": "warn",
-        "prettier/prettier": ["error", { endOfLine: "auto" }],
+        "prettier/prettier": ["error", { endOfLine: "auto", printWidth: 120 }],
       },
     },
     {

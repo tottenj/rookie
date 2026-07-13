@@ -5,6 +5,7 @@
   "type": "module",
   "exports": {
     "./api": "./api.mjs",
+    "./functions": "./functions.mjs",
     "./mobile": "./mobile.mjs"
   },
   "peerDependencies": {

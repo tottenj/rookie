@@ -4,6 +4,7 @@
   "private": true,
   "exports": {
     "./base": "./base.json",
+    "./functions": "./functions.json",
     "./react": "./react.json",
     "./nest": "./nest.json"
   }
