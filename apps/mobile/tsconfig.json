@@ -7,5 +7,5 @@
     },
     "types": ["jest"]
   },
-  "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts", "src/uniwind-types.d.ts"]
+  "include": ["**/*.ts", "**/*.tsx", "**/*.d.ts", ".expo/types/**/*.ts", "expo-env.d.ts", "src/uniwind-types.d.ts"]
 }
