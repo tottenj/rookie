@@ -10,3 +10,4 @@ allowBuilds:
   esbuild: true
   protobufjs: true
   unrs-resolver: true
+  re2: true
