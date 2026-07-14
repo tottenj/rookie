@@ -4,6 +4,6 @@
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./dist",
-    "incremental": true
+    "incremental": false
   }
 }

@@ -5,15 +5,24 @@ import { UsersRepository } from "@/lib/repositories/userRepository/UserRepositor
 import { useMutation } from "@tanstack/react-query";
 import { EmailSignUpSchema } from "@rookie/shared-types";
 
+const testProfile = {
+  id: "test-id",
+  email: "test@example.com",
+  displayName: "Test User",
+  avatarUrl: "https://example.com/avatar.png",
+}
+
 export function useSignUp() {
   const mutation = useMutation({
     mutationFn: async (data: EmailSignUpSchema) => {
       const firebaseUser = await AuthRepository.signUp({ email: data.email, password: data.password });
+      console.log("Firebase user created:", firebaseUser.uid);
       try {
         if (!firebaseUser.email) throw new Error("Firebase user email is null");
-        const profile = await UsersRepository.create({ email: firebaseUser.email });
-        return { firebaseUser, profile };
+        //const profile = await UsersRepository.create({ email: firebaseUser.email });
+        return { firebaseUser };
       } catch (error) {
+        console.log("Error creating user profile in backend:", error);
         await firebaseUser.delete().catch((deleteError) => {
           console.error("Failed to delete Firebase user:", deleteError);
         });

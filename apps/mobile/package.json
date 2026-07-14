@@ -98,7 +98,7 @@
     "dev": "expo start --dev-client",
     "build:ios": "eas build --platform ios",
     "build:android": "eas build --platform android",
-    "build": "eas build --platform all",
+    "build": "expo export --platform all --output-dir dist",
     "prebuild": "expo prebuild",
     "prebuild:clean": "expo prebuild --clean",
     "start": "expo start",

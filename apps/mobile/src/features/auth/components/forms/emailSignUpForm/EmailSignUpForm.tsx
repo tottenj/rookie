@@ -21,9 +21,11 @@ export default function EmailSignUpForm() {
     },
   });
 
-  const { signUp, isLoading, errorMessage } = useSignUp();
+  const { signUp, isLoading, errorMessage, error } = useSignUp();
   const onSubmit = handleSubmit((data) => {
+    console.log("Submitting sign-up form with data:", data);
     signUp(data);
+    console.log("Sign-up error:", error);
   });
 
   return (

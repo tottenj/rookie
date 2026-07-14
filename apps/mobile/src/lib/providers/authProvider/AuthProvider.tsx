@@ -1,6 +1,7 @@
 // AuthProvider.tsx — just tracks state, no splash logic
-import { getAuth, onAuthStateChanged, User } from "@react-native-firebase/auth";
+import { onAuthStateChanged, User } from "@react-native-firebase/auth";
 import { createContext, PropsWithChildren, useContext, useEffect, useState } from "react";
+import { auth } from "../../../../lib/firebase/firebase";
 
 type AuthContextValue = {
   user: User | null;
@@ -14,7 +15,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    return onAuthStateChanged(getAuth(), (user) => {
+    return onAuthStateChanged(auth, (user) => {
       setUser(user);
       setLoading(false);
     });

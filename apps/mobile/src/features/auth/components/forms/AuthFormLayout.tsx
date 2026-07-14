@@ -3,6 +3,7 @@ import AppParagraph from "@/components/ui/text/Paragraph/AppParagraph";
 import { Image } from "expo-image";
 import { Href, Link } from "expo-router";
 import { KeyboardAvoidingView, Platform, View } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 
 interface AuthFormLayoutProps {
   children: React.ReactNode;
@@ -16,7 +17,7 @@ interface AuthFormLayoutProps {
 
 export default function AuthFormLayout({ children, isLoading = false, submitButtonLabel, errorMessage, linkHref, linkText, onSubmit }: AuthFormLayoutProps) {
   return (
-    <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} className="flex-1 px-4 pb-8 pt-8 gap-16 justify-evenly">
+    <ScrollView contentContainerStyle={{ flex: 1, paddingHorizontal: 16, paddingBottom: 32, paddingTop: 32, gap: 16, justifyContent: "space-evenly" }}>
       <View className="items-center pt-6">
         <Image source={require("../../../../../assets/images/Apple_Music_Classical_iOS_26_icon.png")} style={{ width: 220, height: 220 }} contentFit="contain" />
       </View>
@@ -37,6 +38,6 @@ export default function AuthFormLayout({ children, isLoading = false, submitButt
           </Link>
         </View>
       </View>
-    </KeyboardAvoidingView>
+    </ScrollView>
   );
 }

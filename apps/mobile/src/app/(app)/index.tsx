@@ -1,7 +1,12 @@
-import { View } from "react-native";
+import { useAuth } from "@/lib/providers/authProvider/AuthProvider";
+import { Text } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function index() {
+  const {user}= useAuth()
   return (
-    <View></View>
+    <SafeAreaView>
+      <Text>{user ? `Hello, ${user.uid}` : "Not logged in"}</Text>
+    </SafeAreaView>
   )
 }
