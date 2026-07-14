@@ -3,13 +3,13 @@ import { renderHook, waitFor, act } from "@testing-library/react-native";
 import { useSignUp } from "./useSignUp";
 import { AuthRepository } from "@/lib/repositories/authRepository/auth.repository";
 import { UsersRepository } from "@/lib/repositories/userRepository/UserRepository";
-import { mapAuthError } from "@/lib/errors/mapAuthErrors";
+import { mapAuthError } from "@/lib/errors/mapAuthErrors/mapAuthErrors";
 import QueryClientWrapper, { createTestQueryClient } from "../../../../lib/test/utils/QueryClientWrapper";
 import { QueryClient } from "@tanstack/react-query";
 
 jest.mock("@/lib/repositories/authRepository/auth.repository");
 jest.mock("@/lib/repositories/userRepository/UserRepository");
-jest.mock("@/lib/errors/mapAuthErrors");
+jest.mock("@/lib/errors/mapAuthErrors/mapAuthErrors");
 
 const mockedAuth = AuthRepository as jest.Mocked<typeof AuthRepository>;
 const mockedUsers = UsersRepository as jest.Mocked<typeof UsersRepository>;
@@ -38,7 +38,7 @@ describe("useSignUp", () => {
       await result.current.signUpAsync(validInput);
     });
     expect(mockedAuth.signUp).toHaveBeenCalledWith({ email: validInput.email, password: validInput.password });
-    expect(mockedUsers.create).toHaveBeenCalledWith({ uid: "123", email: validInput.email });
+    expect(mockedUsers.create).toHaveBeenCalledWith({ email: validInput.email });
     expect(firebaseUser.delete).not.toHaveBeenCalled();
   });
 

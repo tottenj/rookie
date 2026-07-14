@@ -4,6 +4,15 @@ import { isAxiosError } from "axios";
 export function mapAuthError(error: unknown): string | null {
   if (!error) return null;
 
+
+   if (isAxiosError(error)) {
+     const status = error.response?.status;
+     const backendMessage = error.response?.data?.message;
+     if (status === 409) return "That account already exists.";
+     if (status === 400 && typeof backendMessage === "string") return backendMessage;
+     return "Couldn't reach the server. Please try again.";
+   }
+
   if (typeof error === "object" && error !== null && "code" in error) {
     const code = (error as { code: string }).code;
     switch (code) {
@@ -27,13 +36,7 @@ export function mapAuthError(error: unknown): string | null {
   }
 
   // NestJS backend errors via axios: { response: { status, data: { message } } }
-  if (isAxiosError(error)) {
-    const status = error.response?.status;
-    const backendMessage = error.response?.data?.message;
-    if (status === 409) return "That account already exists.";
-    if (status === 400 && typeof backendMessage === "string") return backendMessage;
-    return "Couldn't reach the server. Please try again.";
-  }
+ 
 
   return "Something went wrong. Please try again.";
 }

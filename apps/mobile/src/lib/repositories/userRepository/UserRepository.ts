@@ -1,41 +1,28 @@
 // apps/mobile/api/users/users.repository.ts
-
 import { apiClient } from "../../../../api/client";
+import { AppUser, CreateUser } from "@rookie/shared-types";
 
-
-export type CreateUserDto = {
-  uid: string;
-  email: string | null;
-};
 
 export type UpdateUserDto = Partial<{
   displayName: string;
   avatarUrl: string;
-  // ...whatever fields your backend profile supports
 }>;
 
-export type User = {
-  id: string;
-  uid: string;
-  email: string;
-  displayName: string | null;
-  avatarUrl: string | null;
-  createdAt: string;
-};
+
 
 export const UsersRepository = {
-  create: async (data: CreateUserDto): Promise<User> => {
-    const res = await apiClient.post<User>("/users", data);
+  create: async (data: CreateUser): Promise<AppUser> => {
+    const res = await apiClient.post<AppUser>("/users", data);
     return res.data;
   },
 
-  getMe: async (): Promise<User> => {
-    const res = await apiClient.get<User>("/users/me");
+  getMe: async (): Promise<AppUser> => {
+    const res = await apiClient.get<AppUser>("/users/me");
     return res.data;
   },
 
-  updateMe: async (data: UpdateUserDto): Promise<User> => {
-    const res = await apiClient.patch<User>("/users/me", data);
+  updateMe: async (data: UpdateUserDto): Promise<AppUser> => {
+    const res = await apiClient.patch<AppUser>("/users/me", data);
     return res.data;
   },
 

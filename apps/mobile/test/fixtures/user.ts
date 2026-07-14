@@ -1,5 +1,5 @@
 import type { User as FirebaseUser } from "@react-native-firebase/auth";
-import type { User as RookieUser } from "@/lib/repositories/userRepository/UserRepository";
+import type { AppUser as RookieUser } from "@rookie/shared-types";
 
 export function createFirebaseUserFixture(overrides: Partial<FirebaseUser> = {}): FirebaseUser {
   return {

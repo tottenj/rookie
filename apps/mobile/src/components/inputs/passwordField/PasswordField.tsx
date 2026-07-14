@@ -11,7 +11,11 @@ interface PasswordFieldProps<T extends HasPassword> {
   name?: Path<T>;
 }
 
-export default function PasswordField<T extends HasPassword>({ control, name = "password" as Path<T>, errorMessage }: PasswordFieldProps<T>) {
+export default function PasswordField<T extends HasPassword>({
+  control,
+  name = "password" as Path<T>,
+  errorMessage,
+}: PasswordFieldProps<T>) {
   return (
     <Controller
       control={control}
@@ -19,8 +23,10 @@ export default function PasswordField<T extends HasPassword>({ control, name = "
       render={({ field: { onChange, onBlur, value } }) => (
         <AppTextField
           label="Password"
+          testID={`${name ?? "password"}-field`}
           error={errorMessage}
           inputProps={{
+            testID: `${name ?? "password"}-input`,
             value,
             onChangeText: onChange,
             onBlur,

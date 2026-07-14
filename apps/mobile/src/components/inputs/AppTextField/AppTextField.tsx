@@ -5,12 +5,11 @@ type AppTextFieldProps = ComponentProps<typeof TextField> & {
   label?: string;
   error?: string | undefined;
   inputProps?: ComponentProps<typeof Input>;
-  datacy?: string
 };
 
-export default function AppTextField({ label, error, inputProps, datacy, ...props }: AppTextFieldProps) {
+export default function AppTextField({ label, error, inputProps, testID, ...props }: AppTextFieldProps) {
   return (
-    <TextField {...props} isInvalid={!!error} data-cy={datacy}>
+    <TextField {...props} isInvalid={!!error} testID={testID}>
       {label && <Label>{label}</Label>}
       <Input {...inputProps} />
       {error && <FieldError>{error}</FieldError>}

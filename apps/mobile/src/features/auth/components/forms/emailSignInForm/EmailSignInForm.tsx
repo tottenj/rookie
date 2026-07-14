@@ -29,7 +29,7 @@ export default function EmailSignInForm() {
   return (
     <AuthFormLayout linkText="Don\'t have an account? Create one" linkHref="/(auth)/signup" submitButtonLabel="Sign In" isLoading={isLoading} errorMessage={errorMessage} onSubmit={onSubmit}>
       <AppHeading type="h1">{"Sign In"}</AppHeading>
-      <EmailField control={control} errorMessage={errors.email?.message} />
+      <EmailField  control={control} errorMessage={errors.email?.message} />
       <PasswordField control={control} errorMessage={errors.password?.message} />
     </AuthFormLayout>
   );

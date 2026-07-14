@@ -24,7 +24,7 @@ export default function AuthFormLayout({ children, isLoading = false, submitButt
         {children}
 
         {submitButtonLabel && onSubmit && (
-          <AppButton isLoading={isLoading} onPress={onSubmit}>
+          <AppButton testID={"submit-button"} isLoading={isLoading} onPress={onSubmit}>
             <AppButtonLabel>{submitButtonLabel}</AppButtonLabel>
           </AppButton>
         )}

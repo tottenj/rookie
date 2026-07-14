@@ -11,17 +11,22 @@ interface EmailFieldProps<T extends HasEmail> {
   name?: Path<T>;
 }
 
-export default function EmailField<T extends HasEmail>({ control, name = "email" as Path<T>, errorMessage }: EmailFieldProps<T>) {
+export default function EmailField<T extends HasEmail>({
+  control,
+  name = "email" as Path<T>,
+  errorMessage,
+}: EmailFieldProps<T>) {
   return (
     <Controller
       control={control}
       name={name}
       render={({ field: { onChange, onBlur, value } }) => (
         <AppTextField
+          testID={`${name ?? "email"}-field`}
           label="Email"
           error={errorMessage}
-          datacy={name ?? "email-field"}
           inputProps={{
+            testID: `${name ?? "email"}-input`,
             value,
             onChangeText: onChange,
             onBlur,
