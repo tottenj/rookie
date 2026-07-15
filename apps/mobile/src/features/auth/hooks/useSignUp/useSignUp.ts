@@ -1,6 +1,7 @@
 // apps/mobile/features/auth/hooks/useSignUp.ts
 import { mapAuthError } from "@/lib/errors/mapAuthErrors/mapAuthErrors";
 import { AuthRepository } from "@/lib/repositories/authRepository/auth.repository";
+import { UsersRepository } from "@/lib/repositories/userRepository/UserRepository";
 import { useMutation } from "@tanstack/react-query";
 import { EmailSignUpSchema } from "@rookie/shared-types";
 
@@ -11,8 +12,8 @@ export function useSignUp() {
       console.log("Firebase user created:", firebaseUser.uid);
       try {
         if (!firebaseUser.email) throw new Error("Firebase user email is null");
-        //const profile = await UsersRepository.create({ email: firebaseUser.email });
-        return { firebaseUser };
+        const profile = await UsersRepository.create({ email: firebaseUser.email });
+        return { firebaseUser, profile };
       } catch (error) {
         console.log("Error creating user profile in backend:", error);
         await firebaseUser.delete().catch((deleteError) => {
