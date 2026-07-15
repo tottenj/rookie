@@ -2,7 +2,7 @@ import AppButton, { AppButtonLabel } from "@/components/ui/buttons/AppButton/App
 import AppParagraph from "@/components/ui/text/Paragraph/AppParagraph";
 import { Image } from "expo-image";
 import { Href, Link } from "expo-router";
-import { KeyboardAvoidingView, Platform, View } from "react-native";
+import { View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 
 interface AuthFormLayoutProps {
@@ -15,11 +15,32 @@ interface AuthFormLayoutProps {
   linkHref: Href;
 }
 
-export default function AuthFormLayout({ children, isLoading = false, submitButtonLabel, errorMessage, linkHref, linkText, onSubmit }: AuthFormLayoutProps) {
+export default function AuthFormLayout({
+  children,
+  isLoading = false,
+  submitButtonLabel,
+  errorMessage,
+  linkHref,
+  linkText,
+  onSubmit,
+}: AuthFormLayoutProps) {
   return (
-    <ScrollView contentContainerStyle={{ flex: 1, paddingHorizontal: 16, paddingBottom: 32, paddingTop: 32, gap: 16, justifyContent: "space-evenly" }}>
+    <ScrollView
+      contentContainerStyle={{
+        flex: 1,
+        paddingHorizontal: 16,
+        paddingBottom: 32,
+        paddingTop: 32,
+        gap: 16,
+        justifyContent: "space-evenly",
+      }}
+    >
       <View className="items-center pt-6">
-        <Image source={require("../../../../../assets/images/Apple_Music_Classical_iOS_26_icon.png")} style={{ width: 220, height: 220 }} contentFit="contain" />
+        <Image
+          source={require("../../../../../assets/images/Apple_Music_Classical_iOS_26_icon.png")}
+          style={{ width: 220, height: 220 }}
+          contentFit="contain"
+        />
       </View>
       <View className="gap-4 w-full">
         {children}

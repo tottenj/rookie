@@ -1,16 +1,8 @@
 // apps/mobile/features/auth/hooks/useSignUp.ts
 import { mapAuthError } from "@/lib/errors/mapAuthErrors/mapAuthErrors";
 import { AuthRepository } from "@/lib/repositories/authRepository/auth.repository";
-import { UsersRepository } from "@/lib/repositories/userRepository/UserRepository";
 import { useMutation } from "@tanstack/react-query";
 import { EmailSignUpSchema } from "@rookie/shared-types";
-
-const testProfile = {
-  id: "test-id",
-  email: "test@example.com",
-  displayName: "Test User",
-  avatarUrl: "https://example.com/avatar.png",
-}
 
 export function useSignUp() {
   const mutation = useMutation({
