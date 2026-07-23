@@ -20,7 +20,7 @@
     "db:api:test:up": "pnpm --filter @rookie/api run db:test:up",
     "db:api:test:down": "pnpm --filter @rookie/api run db:test:down",
     "firebase": "firebase",
-    "emulators": "firebase emulators:start",
+"emulators": "FIREBASE_AUTH_EMULATOR_HOST=127.0.0.1:9099 FIREBASE_STORAGE_EMULATOR_HOST=127.0.0.1:9199 firebase emulators:start",
     "emulators:persist": "firebase emulators:start --import=firebase/data --export-on-exit"
   },
   "private": true,

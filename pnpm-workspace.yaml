@@ -11,3 +11,5 @@ allowBuilds:
   protobufjs: true
   unrs-resolver: true
   re2: true
+  '@prisma/engines': true
+  prisma: true
