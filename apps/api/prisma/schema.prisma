@@ -30,9 +30,9 @@ model User {
   email       String     @unique
   role        UserRole   @default(USER)
   status      UserStatus @default(ACTIVE)
-  profile UserProfile?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  profile     UserProfile?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model UserProfile {

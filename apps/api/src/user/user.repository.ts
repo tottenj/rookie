@@ -1,24 +1,30 @@
-// users/users.repository.ts
-
-import { Injectable } from "@nestjs/common";
-import { PrismaService } from "../infrastructure/database/prisma/prisma.service";
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../infrastructure/database/prisma/prisma.service';
+import {
+  AuthUserRow,
+  authUserSelect,
+} from './projections/auth-user.projection';
 
 @Injectable()
 export class UserRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  findAuthUserByFirebaseUid(firebaseUid: string) {
+  async findAuthUserByFirebaseUid(
+    firebaseUid: string,
+  ): Promise<AuthUserRow | null> {
     return this.prisma.user.findUnique({
       where: {
         firebaseUid,
       },
-      select: {
-        id: true,
-        firebaseUid: true,
-        email: true,
-        role: true,
-        status: true,
-        profileId: true,
+      select: authUserSelect,
+    });
+  }
+
+  async createUserAccount(firebaseUid: string, email: string) {
+    return this.prisma.user.create({
+      data: {
+        firebaseUid,
+        email,
       },
     });
   }

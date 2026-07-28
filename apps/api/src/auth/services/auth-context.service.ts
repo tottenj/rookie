@@ -1,15 +1,16 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { DecodedIdToken } from 'firebase-admin/auth';
-import { AuthContext } from '../types/auth-context';
+import { UserStatus } from '../../generated/prisma/enums';
 import { UserRepository } from '../../user/user.repository';
+import type { AuthContext } from '../types/auth-context';
+import type { FirebasePrincipal } from '../types/firebase-principal';
 
 @Injectable()
 export class AuthContextService {
   constructor(private readonly userRepository: UserRepository) {}
 
-  async resolve(decodedToken: DecodedIdToken): Promise<AuthContext> {
+  async resolve(principal: FirebasePrincipal): Promise<AuthContext> {
     const user = await this.userRepository.findAuthUserByFirebaseUid(
-      decodedToken.uid,
+      principal.firebaseUid,
     );
 
     if (!user) {
@@ -18,23 +19,19 @@ export class AuthContextService {
       );
     }
 
-    if (user.status !== 'ACTIVE') {
+    if (user.status !== UserStatus.ACTIVE) {
       throw new UnauthorizedException('This Rookie account is not active.');
     }
 
     return {
-      principal: {
-        firebaseUid: decodedToken.uid,
-        email: decodedToken.email ?? null,
-        emailVerified: decodedToken.email_verified ?? false,
-      },
+      principal,
       user: {
         id: user.id,
         role: user.role,
         status: user.status,
         firebaseUid: user.firebaseUid,
         email: user.email,
-        profileId: user.profileId,
+        profileId: user.profile?.id ?? null,
       },
     };
   }

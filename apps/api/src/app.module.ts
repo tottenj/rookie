@@ -3,7 +3,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { APP_PIPE, APP_INTERCEPTOR, APP_FILTER } from '@nestjs/core';
 import { ZodValidationPipe, ZodSerializerInterceptor } from 'nestjs-zod';
-import { HttpExceptionFilter } from './common/filters/http-exception.filter';
+import { ZodSerializationExceptionFilter } from './common/filters/zodSerializationExceptionFilter';
+
 import { UserModule } from './user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { FirebaseModule } from './infrastructure/firebase/firebase.module';
@@ -31,7 +32,7 @@ import { PrismaModule } from './infrastructure/database/prisma/prisma.module';
     },
     {
       provide: APP_FILTER,
-      useClass: HttpExceptionFilter,
+      useClass: ZodSerializationExceptionFilter,
     },
   ],
 })

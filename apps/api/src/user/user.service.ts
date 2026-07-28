@@ -1,12 +1,36 @@
-import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+} from '@nestjs/common';
 import { UpdateUserDto } from './dto/update-user.dto';
-import type { Actor } from '../auth/types/actor';
+import { UserRepository } from './user.repository';
+import { FirebasePrincipal } from '../auth/types/firebase-principal';
 
 @Injectable()
 export class UserService {
-  create(createUserDto: CreateUserDto, actor: Actor) {
-    return 'This action adds a new user';
+  constructor(private readonly userRepository: UserRepository) {}
+  async create(principal: FirebasePrincipal) {
+    if (!principal.email) {
+      throw new BadRequestException(
+        'The Firebase account does not have an email address.',
+      );
+    }
+
+    const existingUser = await this.userRepository.findAuthUserByFirebaseUid(
+      principal.firebaseUid,
+    );
+
+    if (existingUser) {
+      throw new ConflictException(
+        'A user account already exists for this Firebase account.',
+      );
+    }
+
+    return this.userRepository.createUserAccount(
+      principal.firebaseUid,
+      principal.email,
+    );
   }
 
   findAll() {
@@ -18,6 +42,7 @@ export class UserService {
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
+    void updateUserDto;
     return `This action updates a #${id} user`;
   }
 

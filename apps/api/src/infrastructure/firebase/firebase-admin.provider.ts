@@ -5,9 +5,7 @@ import { initializeApp } from 'firebase-admin';
 
 export const firebaseAdminProvider = {
   provide: FIREBASE_ADMIN_APP,
-
   inject: [ConfigService],
-
   useFactory(configService: ConfigService): App {
     const existingApp = getApps()[0];
     if (existingApp) return existingApp;

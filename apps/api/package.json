@@ -49,7 +49,7 @@
   "devDependencies": {
     "@nestjs/cli": "^11.0.0",
     "@nestjs/schematics": "^11.0.0",
-    "@nestjs/testing": "^11.0.1",
+    "@nestjs/testing": "^11.1.27",
     "@rookie/eslint-config": "workspace:*",
     "@rookie/tsconfig": "workspace:*",
     "@types/express": "^5.0.0",

@@ -1,28 +1,40 @@
-import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { FirebaseAuthService } from '../../infrastructure/firebase/firebase-auth.service';
-import { AuthContextService } from '../services/auth-context.service';
-import { AuthenticatedRequest } from '../types/authenticated-requtest';
+import { FirebaseAuthenticatedRequest } from '../types/firebase-authenticated-request';
 
 @Injectable()
 export class FirebaseAuthGuard implements CanActivate {
-  constructor(
-    private readonly firebaseAuthService: FirebaseAuthService,
-    private readonly authContextService: AuthContextService,
-  ) {}
+  constructor(private readonly firebaseAuthService: FirebaseAuthService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = context.switchToHttp().getRequest<AuthenticatedRequest>();
+    const request = context
+      .switchToHttp()
+      .getRequest<FirebaseAuthenticatedRequest>();
+
     const token = this.extractBearerToken(request.headers.authorization);
     const decodedToken = await this.firebaseAuthService.verifyIdToken(token);
-    request.authContext = await this.authContextService.resolve(decodedToken);
+
+    request.principal = {
+      firebaseUid: decodedToken.uid,
+      email: decodedToken.email ?? null,
+      emailVerified: decodedToken.email_verified ?? false,
+    };
+
     return true;
   }
 
-  private extractBearerToken(authorization: string | undefined): string {
+  private extractBearerToken(authorization?: string): string {
     const [scheme, token] = authorization?.split(' ') ?? [];
+
     if (scheme !== 'Bearer' || !token) {
       throw new UnauthorizedException('A Firebase ID token is required.');
     }
+
     return token;
   }
 }

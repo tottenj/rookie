@@ -1,5 +1,5 @@
-import { UserRole, UserStatus } from "../../generated/prisma/enums";
-import { FirebasePrincipal } from "./firebase-principal";
+import { UserRole, UserStatus } from '../../generated/prisma/enums';
+import { FirebasePrincipal } from './firebase-principal';
 
 export interface AuthContext {
   principal: FirebasePrincipal;

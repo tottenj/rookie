@@ -5,7 +5,8 @@ import tseslint from "typescript-eslint";
 
 export function createApiConfig(options = {}, overrides = {}) {
   const { tsconfigRootDir } = options;
-  const { ignores = ["eslint.config.mjs"] } = overrides;
+
+  const { ignores = ["eslint.config.mjs", "dist/**", "coverage/**", "src/generated/**"] } = overrides;
 
   return tseslint.config(
     {
@@ -20,7 +21,7 @@ export function createApiConfig(options = {}, overrides = {}) {
           ...globals.node,
           ...globals.jest,
         },
-        sourceType: "commonjs",
+        sourceType: "module",
         parserOptions: {
           projectService: true,
           ...(tsconfigRootDir ? { tsconfigRootDir } : {}),
@@ -32,7 +33,13 @@ export function createApiConfig(options = {}, overrides = {}) {
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/no-floating-promises": "warn",
         "@typescript-eslint/no-unsafe-argument": "warn",
-        "prettier/prettier": ["error", { endOfLine: "auto", printWidth: 120 }],
+        "prettier/prettier": [
+          "error",
+          {
+            endOfLine: "auto",
+            printWidth: 120,
+          },
+        ],
       },
     },
     {

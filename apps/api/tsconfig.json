@@ -1,9 +1,10 @@
 {
   "extends": "@rookie/tsconfig/nest",
-
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./dist",
     "incremental": false
-  }
+  },
+  "include": ["src/**/*", "test/**/*.ts"],
+  "exclude": ["node_modules", "dist"]
 }

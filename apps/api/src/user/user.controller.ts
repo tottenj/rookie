@@ -1,20 +1,27 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { FirebaseAuthGuard } from '../auth/guards/firebase-auth.guard';
-import { CurrentActor } from '../auth/decorators/current-actor.decorator';
-import { type Actor } from '../auth/types/actor';
+import { type FirebasePrincipal } from '../auth/types/firebase-principal';
+import { RequireFirebaseUser } from '../auth/decorators/route/require-firebase-user.decorator';
+import { RequireAppUser } from '../auth/decorators/route/require-app-user.decorator';
+import { CurrentPrincipal } from '../auth/decorators/current-principle.decorator';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-
-  @UseGuards(FirebaseAuthGuard)
   @Post()
-  create(@Body() createUserDto: CreateUserDto, @CurrentActor() actor: Actor) {
-    return this.userService.create(createUserDto, actor);
+  @RequireFirebaseUser()
+  create(@CurrentPrincipal() principal: FirebasePrincipal) {
+    return this.userService.create(principal);
   }
 
   @Get()
@@ -23,6 +30,7 @@ export class UserController {
   }
 
   @Get(':id')
+  @RequireAppUser()
   findOne(@Param('id') id: string) {
     return this.userService.findOne(+id);
   }
