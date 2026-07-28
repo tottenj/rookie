@@ -6,12 +6,26 @@ import {
 } from '@nestjs/common';
 import { FirebaseAuthService } from '../../infrastructure/firebase/firebase-auth.service';
 import { FirebaseAuthenticatedRequest } from '../types/firebase-authenticated-request';
+import { Reflector } from '@nestjs/core/services/reflector.service';
+import { IS_PUBLIC_KEY } from '../decorators/route/public.decorator';
 
 @Injectable()
 export class FirebaseAuthGuard implements CanActivate {
-  constructor(private readonly firebaseAuthService: FirebaseAuthService) {}
+  constructor(
+    private readonly reflector: Reflector,
+    private readonly firebaseAuthService: FirebaseAuthService,
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
+    const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+
+    if (isPublic) {
+      return true;
+    }
+
     const request = context
       .switchToHttp()
       .getRequest<FirebaseAuthenticatedRequest>();
