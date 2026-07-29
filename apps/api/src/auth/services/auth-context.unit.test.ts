@@ -1,6 +1,9 @@
 import { UnauthorizedException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import { USER_REPOSITORY, type UserRepositoryContract } from '../../user/repository/user.repository.contract';
+import {
+  USER_REPOSITORY,
+  type UserRepositoryContract,
+} from '../../user/repository/user.repository.contract';
 import { UserStatus } from '../../generated/prisma/enums';
 import { AuthContextService } from './auth-context.service';
 import { createFirebasePrincipalFactory } from '../../../test/factories/auth/firebasePrincipal.factory';
@@ -8,7 +11,9 @@ import { createAuthUserRowFactory } from '../../../test/factories/auth/authUserR
 
 describe('AuthContextService', () => {
   let authContextService: AuthContextService;
-  let userRepository: jest.Mocked<Pick<UserRepositoryContract, 'findAuthUserByFirebaseUid'>>;
+  let userRepository: jest.Mocked<
+    Pick<UserRepositoryContract, 'findAuthUserByFirebaseUid'>
+  >;
 
   beforeEach(async () => {
     userRepository = {
@@ -48,7 +53,9 @@ describe('AuthContextService', () => {
         },
       });
 
-      expect(userRepository.findAuthUserByFirebaseUid).toHaveBeenCalledWith(principal.firebaseUid);
+      expect(userRepository.findAuthUserByFirebaseUid).toHaveBeenCalledWith(
+        principal.firebaseUid,
+      );
 
       expect(userRepository.findAuthUserByFirebaseUid).toHaveBeenCalledTimes(1);
     });
@@ -59,32 +66,45 @@ describe('AuthContextService', () => {
       const result = authContextService.resolve(principal);
 
       await expect(result).rejects.toEqual(
-        new UnauthorizedException('No Rookie account exists for this Firebase user.'),
+        new UnauthorizedException(
+          'No Rookie account exists for this Firebase user.',
+        ),
       );
 
-      expect(userRepository.findAuthUserByFirebaseUid).toHaveBeenCalledWith(principal.firebaseUid);
+      expect(userRepository.findAuthUserByFirebaseUid).toHaveBeenCalledWith(
+        principal.firebaseUid,
+      );
 
       expect(userRepository.findAuthUserByFirebaseUid).toHaveBeenCalledTimes(1);
     });
 
-    it("throws UnauthorizedException when the user's status is not ACTIVE", async () => {
-      const principal = createFirebasePrincipalFactory();
-      userRepository.findAuthUserByFirebaseUid.mockResolvedValue({
-        id: 'user-id',
-        role: 'USER',
-        status: UserStatus.SUSPENDED,
-        firebaseUid: principal.firebaseUid,
-        email: principal.email ?? 'user@example.com',
-        profile: null,
-      });
+    it.each([[UserStatus.SUSPENDED], [UserStatus.DELETED]])(
+      "throws UnauthorizedException when the user's status is %s",
+      async (status) => {
+        const principal = createFirebasePrincipalFactory();
+        userRepository.findAuthUserByFirebaseUid.mockResolvedValue({
+          id: 'user-id',
+          role: 'USER',
+          status: status,
+          firebaseUid: principal.firebaseUid,
+          email: principal.email ?? 'user@example.com',
+          profile: null,
+        });
 
-      const result = authContextService.resolve(principal);
+        const result = authContextService.resolve(principal);
 
-      await expect(result).rejects.toEqual(new UnauthorizedException('This Rookie account is not active.'));
+        await expect(result).rejects.toEqual(
+          new UnauthorizedException('This Rookie account is not active.'),
+        );
 
-      expect(userRepository.findAuthUserByFirebaseUid).toHaveBeenCalledWith(principal.firebaseUid);
+        expect(userRepository.findAuthUserByFirebaseUid).toHaveBeenCalledWith(
+          principal.firebaseUid,
+        );
 
-      expect(userRepository.findAuthUserByFirebaseUid).toHaveBeenCalledTimes(1);
-    });
+        expect(userRepository.findAuthUserByFirebaseUid).toHaveBeenCalledTimes(
+          1,
+        );
+      },
+    );
   });
 });
