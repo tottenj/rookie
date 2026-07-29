@@ -17,6 +17,7 @@ const transformedPackages = [
 const baseConfig = {
   preset: "jest-expo",
   moduleNameMapper: {
+    "^(\\.{1,2}/.*)\\.js$": "$1",
     "^@rookie/shared-types$": "<rootDir>/../../packages/shared-types/src/index.ts",
     "^@/assets/(.*)$": "<rootDir>/assets/$1",
     "^@/(.*)$": "<rootDir>/src/$1",

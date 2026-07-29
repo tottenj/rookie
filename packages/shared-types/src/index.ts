@@ -1,7 +1,7 @@
 //auth
-export * from "./auth/emailSignUpSchema";
-export * from "./auth/emailSignInSchema";
+export * from "./auth/emailSignUpSchema.js";
+export * from "./auth/emailSignInSchema.js";
 
 //users
-export * from "./user/createUserSchema";
-export * from "./user/AppUser";
+export * from "./user/createUserSchema.js";
+export * from "./user/AppUser.js";
