@@ -13,7 +13,7 @@ module.exports = {
     {
       ...commonConfig,
       displayName: 'api-unit',
-      testMatch: ['<rootDir>/src/**/*.spec.ts'],
+      testMatch: ['<rootDir>/src/**/*.unit.test.ts'],
       testPathIgnorePatterns: ['/node_modules/', '/dist/'],
       coverageDirectory: '<rootDir>/coverage/unit',
     },
@@ -22,12 +22,7 @@ module.exports = {
       displayName: 'api-integration',
       testMatch: [
         '<rootDir>/__tests__/integration/**/*.test.ts',
-        '<rootDir>/__tests__/integration/**/*.spec.ts',
-        '<rootDir>/__tests__/e2e/**/*.test.ts',
-        '<rootDir>/__tests__/e2e/**/*.spec.ts',
-        '<rootDir>/test/**/*.e2e-spec.ts',
-        '<rootDir>/test/**/*.integration-spec.ts',
-        '<rootDir>/src/**/*.integration.spec.ts',
+        '<rootDir>/src/**/*.integration.test.ts',
       ],
       testPathIgnorePatterns: ['/node_modules/', '/dist/'],
       coverageDirectory: '<rootDir>/coverage/integration',

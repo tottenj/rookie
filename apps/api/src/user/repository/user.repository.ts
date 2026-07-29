@@ -1,12 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../infrastructure/database/prisma/prisma.service';
-import {
-  AuthUserRow,
-  authUserSelect,
-} from './projections/auth-user.projection';
+import { AuthUserRow, authUserSelect } from '../projections/auth-user.projection';
+import type { UserRepositoryContract } from './user.repository.contract';
+import { PrismaService } from '../../infrastructure/database/prisma/prisma.service';
+
 
 @Injectable()
-export class UserRepository {
+export class UserRepository implements UserRepositoryContract {
   constructor(private readonly prisma: PrismaService) {}
 
   async findAuthUserByFirebaseUid(

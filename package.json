@@ -21,7 +21,14 @@
     "db:api:test:down": "pnpm --filter @rookie/api run db:test:down",
     "firebase": "firebase",
     "emulators": "FIREBASE_AUTH_EMULATOR_HOST=127.0.0.1:9099 FIREBASE_STORAGE_EMULATOR_HOST=127.0.0.1:9199 firebase emulators:start",
-    "emulators:persist": "FIREBASE_AUTH_EMULATOR_HOST=127.0.0.1:9099 FIREBASE_STORAGE_EMULATOR_HOST=127.0.0.1:9199 firebase emulators:start --import=firebase/data --export-on-exit"
+    "emulators:persist": "FIREBASE_AUTH_EMULATOR_HOST=127.0.0.1:9099 FIREBASE_STORAGE_EMULATOR_HOST=127.0.0.1:9199 firebase emulators:start --import=firebase/data --export-on-exit",
+    "prisma:generate": "pnpm --filter @rookie/api run prisma:generate",
+    "prisma:migrate:dev": "pnpm --filter @rookie/api run prisma:migrate:dev",
+    "prisma:migrate:deploy": "pnpm --filter @rookie/api run prisma:migrate:deploy",
+    "prisma:migrate:reset": "pnpm --filter @rookie/api run prisma:migrate:reset",
+    "prisma:studio": "pnpm --filter @rookie/api run prisma:studio",
+    "prisma:generate:dev": "pnpm --filter @rookie/api run prisma:generate:dev",
+    "prisma:migrate:dev:dev": "pnpm --filter @rookie/api run prisma:migrate:dev:dev"
   },
   "private": true,
   "keywords": [],

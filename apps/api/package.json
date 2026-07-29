@@ -30,7 +30,14 @@
     "db:dev:down": "docker compose -f ./compose.yaml down",
     "db:dev:reset": "docker compose -f ./compose.yaml down -v && docker compose -f ./compose.yaml up -d --wait",
     "db:test:up": "docker compose -f ./compose.test.yaml up -d --wait",
-    "db:test:down": "docker compose -f ./compose.test.yaml down -v"
+    "db:test:down": "docker compose -f ./compose.test.yaml down -v",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate:dev": "prisma migrate dev",
+    "prisma:migrate:deploy": "prisma migrate deploy",
+    "prisma:migrate:reset": "prisma migrate reset",
+    "prisma:studio": "prisma studio",
+    "prisma:generate:dev": "dotenv -e .env.dev -- prisma generate",
+    "prisma:migrate:dev:dev": "dotenv -e .env.dev -- prisma migrate dev"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
@@ -54,7 +61,7 @@
     "@rookie/tsconfig": "workspace:*",
     "@types/express": "^5.0.0",
     "@types/jest": "^30.0.0",
-    "@types/node": "^24.0.0",
+    "@types/node": "^24.13.2",
     "@types/supertest": "^7.0.0",
     "dotenv": "^17.4.2",
     "eslint": "^9.18.0",

@@ -1,6 +1,5 @@
 {
   "extends": "./base.json",
-
   "compilerOptions": {
     "module": "nodenext",
     "moduleResolution": "nodenext",
@@ -12,10 +11,6 @@
     "target": "ES2023",
     "outDir": "./dist",
     "incremental": true,
-    "strictNullChecks": true,
-    "noImplicitAny": false,
-    "strictBindCallApply": false,
-    "noFallthroughCasesInSwitch": false,
     "types": ["node", "jest"]
   }
 }

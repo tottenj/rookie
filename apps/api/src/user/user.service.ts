@@ -4,7 +4,7 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { UserRepository } from './user.repository';
+import { UserRepository } from './repository/user.repository';
 import { FirebasePrincipal } from '../auth/types/firebase-principal';
 
 @Injectable()

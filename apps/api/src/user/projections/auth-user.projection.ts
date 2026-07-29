@@ -1,3 +1,4 @@
+import type { UserGetPayload } from '../../generated/prisma/models/User';
 import type { Prisma } from '../../generated/prisma/client';
 
 export const authUserSelect = {
@@ -13,6 +14,6 @@ export const authUserSelect = {
   },
 } as const satisfies Prisma.UserSelect;
 
-export type AuthUserRow = Prisma.UserGetPayload<{
+export type AuthUserRow = UserGetPayload<{
   select: typeof authUserSelect;
 }>;

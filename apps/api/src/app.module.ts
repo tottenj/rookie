@@ -11,6 +11,7 @@ import { FirebaseModule } from './infrastructure/firebase/firebase.module';
 import { PrismaModule } from './infrastructure/database/prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
 import { FirebaseAuthGuard } from './auth/guards/firebase-auth.guard';
+import { TimeoutInterceptor } from './common/intercepters/timeoutInterceptor';
 
 @Module({
   imports: [
@@ -32,6 +33,10 @@ import { FirebaseAuthGuard } from './auth/guards/firebase-auth.guard';
     {
       provide: APP_INTERCEPTOR,
       useClass: ZodSerializerInterceptor,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: TimeoutInterceptor,
     },
     {
       provide: APP_FILTER,
