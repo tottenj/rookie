@@ -34,31 +34,38 @@ describe('AuthContextService', () => {
   });
 
   describe('resolve', () => {
-    it('successfully resolves the auth context when the user is found and active', async () => {
-      const principal = createFirebasePrincipalFactory();
-      const mockUser = createAuthUserRowFactory();
+    it.each([[null], ['test-profile-id']])(
+      'successfully resolves the auth context when the user is found and active and profileId is %p',
+      async (profileIdValue) => {
+        const principal = createFirebasePrincipalFactory();
+        const mockUser = createAuthUserRowFactory({
+          profile: profileIdValue === null ? null : { id: profileIdValue },
+        });
 
-      userRepository.findAuthUserByFirebaseUid.mockResolvedValue(mockUser);
-      const result = await authContextService.resolve(principal);
+        userRepository.findAuthUserByFirebaseUid.mockResolvedValue(mockUser);
+        const result = await authContextService.resolve(principal);
 
-      expect(result).toEqual({
-        principal,
-        user: {
-          id: mockUser.id,
-          role: mockUser.role,
-          status: mockUser.status,
-          firebaseUid: mockUser.firebaseUid,
-          email: mockUser.email,
-          profileId: mockUser.profile?.id ?? null,
-        },
-      });
+        expect(result).toEqual({
+          principal,
+          user: {
+            id: mockUser.id,
+            role: mockUser.role,
+            status: mockUser.status,
+            firebaseUid: mockUser.firebaseUid,
+            email: mockUser.email,
+            profileId: mockUser.profile?.id ?? null,
+          },
+        });
 
-      expect(userRepository.findAuthUserByFirebaseUid).toHaveBeenCalledWith(
-        principal.firebaseUid,
-      );
+        expect(userRepository.findAuthUserByFirebaseUid).toHaveBeenCalledWith(
+          principal.firebaseUid,
+        );
 
-      expect(userRepository.findAuthUserByFirebaseUid).toHaveBeenCalledTimes(1);
-    });
+        expect(userRepository.findAuthUserByFirebaseUid).toHaveBeenCalledTimes(
+          1,
+        );
+      },
+    );
 
     it('throws UnauthorizedException when the user is not found', async () => {
       userRepository.findAuthUserByFirebaseUid.mockResolvedValue(null);

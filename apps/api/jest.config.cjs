@@ -6,6 +6,7 @@ const commonConfig = {
     '^.+\\.(t|j)s$': 'ts-jest',
   },
   collectCoverageFrom: ['**/*.(t|j)s'],
+  "coveragePathIgnorePatterns": ['<rootDir>/test/factories/']
 };
 
 module.exports = {
@@ -16,6 +17,7 @@ module.exports = {
       testMatch: ['<rootDir>/src/**/*.unit.test.ts'],
       testPathIgnorePatterns: ['/node_modules/', '/dist/'],
       coverageDirectory: '<rootDir>/coverage/unit',
+      
     },
     {
       ...commonConfig,
