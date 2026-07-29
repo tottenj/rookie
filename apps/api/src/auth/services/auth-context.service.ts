@@ -2,10 +2,7 @@ import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { UserStatus } from '../../generated/prisma/enums';
 import type { AuthContext } from '../types/auth-context';
 import type { FirebasePrincipal } from '../types/firebase-principal';
-import {
-  USER_REPOSITORY,
-  type UserRepositoryContract,
-} from '../../user/repository/user.repository.contract';
+import { USER_REPOSITORY, type UserRepositoryContract } from '../../user/repository/user.repository.contract';
 
 @Injectable()
 export class AuthContextService {
@@ -15,15 +12,10 @@ export class AuthContextService {
   ) {}
 
   async resolve(principal: FirebasePrincipal): Promise<AuthContext> {
-    const user = await this.userRepository.findAuthUserByFirebaseUid(
-      principal.firebaseUid,
-    );
+    const user = await this.userRepository.findAuthUserByFirebaseUid(principal.firebaseUid);
 
- 
     if (!user) {
-      throw new UnauthorizedException(
-        'No Rookie account exists for this Firebase user.',
-      );
+      throw new UnauthorizedException('No Rookie account exists for this Firebase user.');
     }
 
     if (user.status !== UserStatus.ACTIVE) {

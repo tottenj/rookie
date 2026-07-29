@@ -11,10 +11,7 @@ export class ZodSerializationExceptionFilter extends BaseExceptionFilter {
     const zodError = exception.getZodError();
 
     if (zodError instanceof ZodSerializationException) {
-      this.logger.error(
-        'Response failed Zod serialization',
-        JSON.stringify(zodError.message),
-      );
+      this.logger.error('Response failed Zod serialization', JSON.stringify(zodError.message));
     }
 
     super.catch(exception, host);

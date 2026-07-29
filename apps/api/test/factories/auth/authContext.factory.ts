@@ -7,9 +7,7 @@ type AuthContextOverrides = {
   user?: Partial<AuthContext['user']>;
 };
 
-export function createAuthContextFactory(
-  overrides: AuthContextOverrides = {},
-): AuthContext {
+export function createAuthContextFactory(overrides: AuthContextOverrides = {}): AuthContext {
   return {
     principal: createFirebasePrincipalFactory(overrides.principal),
     user: createUserFactory(overrides.user),

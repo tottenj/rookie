@@ -1,13 +1,11 @@
-import { AuthUserRow } from "../../../src/user/projections/auth-user.projection";
+import { AuthUserRow } from '../../../src/user/projections/auth-user.projection';
 import { UserRole, UserStatus } from '../../../src/generated/prisma/enums';
 
 type AuthUserRowOverrides = Omit<Partial<AuthUserRow>, 'profile'> & {
   profile?: Partial<NonNullable<AuthUserRow['profile']>> | null;
 };
 
-export function createAuthUserRowFactory(
-  overrides: AuthUserRowOverrides = {},
-): AuthUserRow {
+export function createAuthUserRowFactory(overrides: AuthUserRowOverrides = {}): AuthUserRow {
   const defaultProfile: NonNullable<AuthUserRow['profile']> = {
     id: 'test-profile-id',
   };

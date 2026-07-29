@@ -1,5 +1,5 @@
+import { Prisma } from '../../generated/prisma/client';
 import type { UserGetPayload } from '../../generated/prisma/models/User';
-import type { Prisma } from '../../generated/prisma/client';
 
 export const authUserSelect = {
   id: true,
