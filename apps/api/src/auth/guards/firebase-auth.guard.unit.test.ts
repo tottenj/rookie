@@ -10,9 +10,7 @@ import { createHttpExecutionContext } from '../../../test/factories/nest/executi
 describe('FirebaseAuthGuard', () => {
   let guard: FirebaseAuthGuard;
 
-  let firebaseAuthService: jest.Mocked<
-    Pick<FirebaseAuthService, 'verifyIdToken'>
-  >;
+  let firebaseAuthService: jest.Mocked<Pick<FirebaseAuthService, 'verifyIdToken'>>;
 
   let reflector: jest.Mocked<Pick<Reflector, 'getAllAndOverride'>>;
 
@@ -46,15 +44,14 @@ describe('FirebaseAuthGuard', () => {
     it('allows public routes without verifying a token', async () => {
       reflector.getAllAndOverride.mockReturnValue(true);
 
-      const { context } =
-        createHttpExecutionContext<FirebaseAuthenticatedRequest>();
+      const { context } = createHttpExecutionContext<FirebaseAuthenticatedRequest>();
 
       await expect(guard.canActivate(context)).resolves.toBe(true);
 
-      expect(reflector.getAllAndOverride).toHaveBeenCalledWith(
-        expect.any(String),
-        [context.getHandler(), context.getClass()],
-      );
+      expect(reflector.getAllAndOverride).toHaveBeenCalledWith(expect.any(String), [
+        context.getHandler(),
+        context.getClass(),
+      ]);
 
       expect(firebaseAuthService.verifyIdToken).not.toHaveBeenCalled();
     });
@@ -62,8 +59,7 @@ describe('FirebaseAuthGuard', () => {
     it('throws UnauthorizedException when authorization is missing', async () => {
       reflector.getAllAndOverride.mockReturnValue(false);
 
-      const { context } =
-        createHttpExecutionContext<FirebaseAuthenticatedRequest>();
+      const { context } = createHttpExecutionContext<FirebaseAuthenticatedRequest>();
 
       await expect(guard.canActivate(context)).rejects.toThrow(
         new UnauthorizedException('A Firebase ID token is required.'),
@@ -75,14 +71,13 @@ describe('FirebaseAuthGuard', () => {
     it('throws UnauthorizedException when the authorization scheme is invalid', async () => {
       reflector.getAllAndOverride.mockReturnValue(false);
 
-      const { context } =
-        createHttpExecutionContext<FirebaseAuthenticatedRequest>({
-          request: {
-            headers: {
-              authorization: 'Basic token-value',
-            },
+      const { context } = createHttpExecutionContext<FirebaseAuthenticatedRequest>({
+        request: {
+          headers: {
+            authorization: 'Basic token-value',
           },
-        });
+        },
+      });
 
       await expect(guard.canActivate(context)).rejects.toThrow(
         new UnauthorizedException('A Firebase ID token is required.'),
@@ -94,14 +89,13 @@ describe('FirebaseAuthGuard', () => {
     it('throws UnauthorizedException when the Bearer token is missing', async () => {
       reflector.getAllAndOverride.mockReturnValue(false);
 
-      const { context } =
-        createHttpExecutionContext<FirebaseAuthenticatedRequest>({
-          request: {
-            headers: {
-              authorization: 'Bearer',
-            },
+      const { context } = createHttpExecutionContext<FirebaseAuthenticatedRequest>({
+        request: {
+          headers: {
+            authorization: 'Bearer',
           },
-        });
+        },
+      });
 
       await expect(guard.canActivate(context)).rejects.toThrow(
         new UnauthorizedException('A Firebase ID token is required.'),
@@ -119,21 +113,18 @@ describe('FirebaseAuthGuard', () => {
         email_verified: true,
       } as Awaited<ReturnType<FirebaseAuthService['verifyIdToken']>>);
 
-      const { context, request } =
-        createHttpExecutionContext<FirebaseAuthenticatedRequest>({
-          request: {
-            headers: {
-              authorization: 'Bearer valid-token',
-            },
+      const { context, request } = createHttpExecutionContext<FirebaseAuthenticatedRequest>({
+        request: {
+          headers: {
+            authorization: 'Bearer valid-token',
           },
-        });
+        },
+      });
 
       await expect(guard.canActivate(context)).resolves.toBe(true);
 
       expect(firebaseAuthService.verifyIdToken).toHaveBeenCalledTimes(1);
-      expect(firebaseAuthService.verifyIdToken).toHaveBeenCalledWith(
-        'valid-token',
-      );
+      expect(firebaseAuthService.verifyIdToken).toHaveBeenCalledWith('valid-token');
 
       expect(request.principal).toEqual({
         firebaseUid: 'firebase-user-123',
@@ -149,14 +140,13 @@ describe('FirebaseAuthGuard', () => {
         uid: 'firebase-user-123',
       } as Awaited<ReturnType<FirebaseAuthService['verifyIdToken']>>);
 
-      const { context, request } =
-        createHttpExecutionContext<FirebaseAuthenticatedRequest>({
-          request: {
-            headers: {
-              authorization: 'Bearer valid-token',
-            },
+      const { context, request } = createHttpExecutionContext<FirebaseAuthenticatedRequest>({
+        request: {
+          headers: {
+            authorization: 'Bearer valid-token',
           },
-        });
+        },
+      });
 
       await expect(guard.canActivate(context)).resolves.toBe(true);
 
@@ -170,27 +160,19 @@ describe('FirebaseAuthGuard', () => {
     it('propagates errors thrown by FirebaseAuthService', async () => {
       reflector.getAllAndOverride.mockReturnValue(false);
 
-      firebaseAuthService.verifyIdToken.mockRejectedValue(
-        new UnauthorizedException('Invalid Firebase ID token.'),
-      );
+      firebaseAuthService.verifyIdToken.mockRejectedValue(new UnauthorizedException('Invalid Firebase ID token.'));
 
-      const { context } =
-        createHttpExecutionContext<FirebaseAuthenticatedRequest>({
-          request: {
-            headers: {
-              authorization: 'Bearer invalid-token',
-            },
+      const { context } = createHttpExecutionContext<FirebaseAuthenticatedRequest>({
+        request: {
+          headers: {
+            authorization: 'Bearer invalid-token',
           },
-        });
+        },
+      });
 
-      await expect(guard.canActivate(context)).rejects.toThrow(
-        new UnauthorizedException('Invalid Firebase ID token.'),
-      );
+      await expect(guard.canActivate(context)).rejects.toThrow(new UnauthorizedException('Invalid Firebase ID token.'));
 
-      expect(firebaseAuthService.verifyIdToken).toHaveBeenCalledWith(
-        'invalid-token',
-      );
+      expect(firebaseAuthService.verifyIdToken).toHaveBeenCalledWith('invalid-token');
     });
   });
-  
 });

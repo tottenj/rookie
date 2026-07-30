@@ -33,37 +33,29 @@ describe('AppUserGuard', () => {
     it('resolves the auth context and attaches it to the request', async () => {
       const mockAuthContext = createAuthContextFactory();
 
-      const { context, request } =
-        createHttpExecutionContext<RequestWithOptionalAuthContext>({
-          request: {
-            principal: mockAuthContext.principal,
-          },
-        });
+      const { context, request } = createHttpExecutionContext<RequestWithOptionalAuthContext>({
+        request: {
+          principal: mockAuthContext.principal,
+        },
+      });
 
       authContextService.resolve.mockResolvedValue(mockAuthContext);
 
       await expect(guard.canActivate(context)).resolves.toBe(true);
 
       expect(authContextService.resolve).toHaveBeenCalledTimes(1);
-      expect(authContextService.resolve).toHaveBeenCalledWith(
-        mockAuthContext.principal,
-      );
+      expect(authContextService.resolve).toHaveBeenCalledWith(mockAuthContext.principal);
       expect(request.authContext).toEqual(mockAuthContext);
     });
 
     it('throws when the request does not have a principal', async () => {
-      const { context, request } =
-        createHttpExecutionContext<RequestWithOptionalAuthContext>();
+      const { context, request } = createHttpExecutionContext<RequestWithOptionalAuthContext>();
 
-      const error = new UnauthorizedException(
-        'A Firebase principal is required.',
-      );
+      const error = new UnauthorizedException('A Firebase principal is required.');
 
       authContextService.resolve.mockRejectedValue(error);
 
-      await expect(guard.canActivate(context)).rejects.toThrow(
-        'A Firebase principal is required.',
-      );
+      await expect(guard.canActivate(context)).rejects.toThrow('A Firebase principal is required.');
 
       expect(authContextService.resolve).toHaveBeenCalledWith(undefined);
       expect(request.authContext).toBeUndefined();

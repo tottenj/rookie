@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 import { Reflector } from '@nestjs/core';
 import { RolesGuard } from './role.guard';
 import { Test } from '@nestjs/testing';
@@ -31,7 +32,8 @@ describe('RolesGuard', () => {
     it.each([[], undefined, null])(
       'should allow access if no roles required',
       (value) => {
-        const { context } = createHttpExecutionContext<RequestWithOptionalAuthContext>();
+        const { context } =
+          createHttpExecutionContext<RequestWithOptionalAuthContext>();
         reflector.getAllAndOverride.mockReturnValue(value);
         expect(guard.canActivate(context)).toBe(true);
         expect(reflector.getAllAndOverride).toHaveBeenCalledWith(
@@ -39,12 +41,14 @@ describe('RolesGuard', () => {
           [context.getHandler(), context.getClass()],
         );
 
-        expect(context.switchToHttp().getRequest).not.toHaveBeenCalled();
+        const getRequestMock = context.switchToHttp().getRequest as jest.Mock;
+        expect(getRequestMock).not.toHaveBeenCalled();
       },
     );
 
     it('should throw if role and user is not present', () => {
-      const { context } = createHttpExecutionContext<RequestWithOptionalAuthContext>();
+      const { context } =
+        createHttpExecutionContext<RequestWithOptionalAuthContext>();
       reflector.getAllAndOverride.mockReturnValue([UserRole.ADMIN]);
 
       expect(() => guard.canActivate(context)).toThrow(
@@ -56,11 +60,12 @@ describe('RolesGuard', () => {
         [context.getHandler(), context.getClass()],
       );
 
-      expect(context.switchToHttp().getRequest).toHaveBeenCalled();
+      const getRequestMock = context.switchToHttp().getRequest as jest.Mock;
+      expect(getRequestMock).toHaveBeenCalled();
     });
 
     it('should throw if users do not have the required role', () => {
-      const { context, request } =
+      const { context } =
         createHttpExecutionContext<RequestWithOptionalAuthContext>({
           request: {
             authContext: {
@@ -90,11 +95,12 @@ describe('RolesGuard', () => {
         [context.getHandler(), context.getClass()],
       );
 
-      expect(context.switchToHttp().getRequest).toHaveBeenCalled();
+      const getRequestMock = context.switchToHttp().getRequest as jest.Mock;
+      expect(getRequestMock).toHaveBeenCalled();
     });
 
     it('should allow access if user has the required role', () => {
-      const { context, request } =
+      const { context } =
         createHttpExecutionContext<RequestWithOptionalAuthContext>({
           request: {
             authContext: {
@@ -122,11 +128,12 @@ describe('RolesGuard', () => {
         [context.getHandler(), context.getClass()],
       );
 
-      expect(context.switchToHttp().getRequest).toHaveBeenCalled();
+      const getRequestMock = context.switchToHttp().getRequest as jest.Mock;
+      expect(getRequestMock).toHaveBeenCalled();
     });
 
     it('should allow access if user has one of the required roles', () => {
-      const { context, request } =
+      const { context } =
         createHttpExecutionContext<RequestWithOptionalAuthContext>({
           request: {
             authContext: {
@@ -157,7 +164,8 @@ describe('RolesGuard', () => {
         [context.getHandler(), context.getClass()],
       );
 
-      expect(context.switchToHttp().getRequest).toHaveBeenCalled();
+      const getRequestMock = context.switchToHttp().getRequest as jest.Mock;
+      expect(getRequestMock).toHaveBeenCalled();
     });
   });
 });

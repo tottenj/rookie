@@ -34,20 +34,13 @@ describe('ZodSerializationExceptionFilter', () => {
       const exception = new ZodSerializationException(result.error);
       const host = {} as ArgumentsHost;
 
-      const loggerSpy = jest
-        .spyOn(Logger.prototype, 'error')
-        .mockImplementation();
+      const loggerSpy = jest.spyOn(Logger.prototype, 'error').mockImplementation();
 
-      const baseCatchSpy = jest
-        .spyOn(BaseExceptionFilter.prototype, 'catch')
-        .mockImplementation();
+      const baseCatchSpy = jest.spyOn(BaseExceptionFilter.prototype, 'catch').mockImplementation();
 
       filter.catch(exception, host);
 
-      expect(loggerSpy).toHaveBeenCalledWith(
-        'Response failed Zod serialization',
-        JSON.stringify(result.error.issues),
-      );
+      expect(loggerSpy).toHaveBeenCalledWith('Response failed Zod serialization', JSON.stringify(result.error.issues));
 
       expect(baseCatchSpy).toHaveBeenCalledWith(exception, host);
     });

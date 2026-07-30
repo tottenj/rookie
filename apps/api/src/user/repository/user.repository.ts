@@ -16,7 +16,7 @@ export class UserRepository implements UserRepositoryContract {
     });
   }
 
-  async createUserAccount(firebaseUid: string, email: string) {
+  async createUserAccount(firebaseUid: string, email: string): Promise<void> {
     await this.prisma.user.create({
       data: {
         firebaseUid,

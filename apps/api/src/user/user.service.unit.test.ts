@@ -73,10 +73,6 @@ describe('UserService', () => {
 
     it('creates a user when one does not already exist', async () => {
       const principal = createFirebasePrincipalFactory();
-      const createdUser = createAuthUserRowFactory({
-        firebaseUid: principal.firebaseUid,
-        email: principal.email!,
-      });
 
       userRepository.findAuthUserByFirebaseUid.mockResolvedValue(null);
       userRepository.createUserAccount.mockResolvedValue(undefined);

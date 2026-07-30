@@ -1,8 +1,8 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 import type { CallHandler, ExecutionContext } from '@nestjs/common';
 import { RequestTimeoutException } from '@nestjs/common';
 import { firstValueFrom, never, of, throwError } from 'rxjs';
 import { TimeoutInterceptor } from './timeoutInterceptor';
-
 
 describe('TimeoutInterceptor', () => {
   let interceptor: TimeoutInterceptor;
@@ -19,7 +19,7 @@ describe('TimeoutInterceptor', () => {
 
   describe('intercept', () => {
     it('returns the value emitted by the handler', async () => {
-      const next: CallHandler = {
+      const next: jest.Mocked<CallHandler> = {
         handle: jest.fn().mockReturnValue(of('response')),
       };
 
@@ -32,7 +32,7 @@ describe('TimeoutInterceptor', () => {
     it('throws RequestTimeoutException when the handler exceeds the timeout', async () => {
       jest.useFakeTimers();
 
-      const next: CallHandler = {
+      const next: jest.Mocked<CallHandler> = {
         handle: jest.fn().mockReturnValue(never()),
       };
 
@@ -57,7 +57,7 @@ describe('TimeoutInterceptor', () => {
     it('rethrows errors that are not timeout errors', async () => {
       const originalError = new Error('Something failed');
 
-      const next: CallHandler = {
+      const next: jest.Mocked<CallHandler> = {
         handle: jest.fn().mockReturnValue(throwError(() => originalError)),
       };
 
