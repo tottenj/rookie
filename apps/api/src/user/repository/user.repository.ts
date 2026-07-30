@@ -8,7 +8,7 @@ export class UserRepository implements UserRepositoryContract {
   constructor(private readonly prisma: PrismaService) {}
 
   async findAuthUserByFirebaseUid(firebaseUid: string): Promise<AuthUserRow | null> {
-    return this.prisma.user.findUnique({
+    return await this.prisma.user.findUnique({
       where: {
         firebaseUid,
       },

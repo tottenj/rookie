@@ -1,12 +1,15 @@
 const commonConfig = {
   rootDir: '.',
   moduleFileExtensions: ['js', 'json', 'ts'],
+  moduleNameMapper: {
+    '^(\\.{1,2}/.*)\\.js$': '$1',
+  },
   testEnvironment: 'node',
   transform: {
     '^.+\\.(t|j)s$': 'ts-jest',
   },
   collectCoverageFrom: ['**/*.(t|j)s'],
-  "coveragePathIgnorePatterns": ['<rootDir>/test/factories/']
+  coveragePathIgnorePatterns: ['<rootDir>/test/factories/', '<rootDir>/prisma/'],
 };
 
 module.exports = {
@@ -17,7 +20,6 @@ module.exports = {
       testMatch: ['<rootDir>/src/**/*.unit.test.ts'],
       testPathIgnorePatterns: ['/node_modules/', '/dist/'],
       coverageDirectory: '<rootDir>/coverage/unit',
-      
     },
     {
       ...commonConfig,
