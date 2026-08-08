@@ -13,4 +13,6 @@ export class FirebaseAuthService {
   verifyIdToken(idToken: string) {
     return getAuth(this.firebaseApp).verifyIdToken(idToken);
   }
+
+
 }

@@ -1,23 +1,43 @@
-import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { UserRepository } from './repository/user.repository';
 import { FirebasePrincipal } from '../auth/types/firebase-principal';
+import {
+  USER_REPOSITORY,
+  type UserRepositoryContract,
+} from './repository/user.repository.contract';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(
+    @Inject(USER_REPOSITORY)
+    private readonly userRepository: UserRepositoryContract,
+  ) {}
   async create(principal: FirebasePrincipal): Promise<unknown> {
     if (!principal.email) {
-      throw new BadRequestException('The Firebase account does not have an email address.');
+      throw new BadRequestException(
+        'The Firebase account does not have an email address.',
+      );
     }
 
-    const existingUser = await this.userRepository.findAuthUserByFirebaseUid(principal.firebaseUid);
+    const existingUser = await this.userRepository.findAuthUserByFirebaseUid(
+      principal.firebaseUid,
+    );
 
     if (existingUser) {
-      throw new ConflictException('A user account already exists for this Firebase account.');
+      throw new ConflictException(
+        'A user account already exists for this Firebase account.',
+      );
     }
 
-    return this.userRepository.createUserAccount(principal.firebaseUid, principal.email);
+    return this.userRepository.createUserAccount(
+      principal.firebaseUid,
+      principal.email,
+    );
   }
 
   findAll() {

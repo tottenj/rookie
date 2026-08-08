@@ -5,6 +5,6 @@
     "outDir": "./dist",
     "incremental": false
   },
-  "include": ["src/**/*", "test/**/*.ts"],
+  "include": ["src/**/*", "test/**/*.ts", "__tests__/**/*.ts"],
   "exclude": ["node_modules", "dist"]
 }

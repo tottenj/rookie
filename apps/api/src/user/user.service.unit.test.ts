@@ -2,12 +2,18 @@ import { BadRequestException, ConflictException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { createAuthUserRowFactory } from '../../test/factories/auth/authUserRow.factory';
 import { createFirebasePrincipalFactory } from '../../test/factories/auth/firebasePrincipal.factory';
-import { UserRepository } from './repository/user.repository';
+import {
+  USER_REPOSITORY,
+  type UserRepositoryContract,
+} from './repository/user.repository.contract';
 import { UserService } from './user.service';
 
 describe('UserService', () => {
   let userRepository: jest.Mocked<
-    Pick<UserRepository, 'findAuthUserByFirebaseUid' | 'createUserAccount'>
+    Pick<
+      UserRepositoryContract,
+      'findAuthUserByFirebaseUid' | 'createUserAccount'
+    >
   >;
 
   let userService: UserService;
@@ -22,7 +28,7 @@ describe('UserService', () => {
       providers: [
         UserService,
         {
-          provide: UserRepository,
+          provide: USER_REPOSITORY,
           useValue: userRepository,
         },
       ],

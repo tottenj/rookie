@@ -4,4 +4,5 @@ export const USER_REPOSITORY = Symbol('USER_REPOSITORY');
 
 export interface UserRepositoryContract {
   findAuthUserByFirebaseUid(firebaseUid: string): Promise<AuthUserRow | null>;
+  createUserAccount(firebaseUid: string, email: string): Promise<void>;
 }

@@ -44,7 +44,7 @@ import { TimeoutInterceptor } from './common/intercepters/timeoutInterceptor';
     },
     {
       provide: APP_GUARD,
-      useClass: FirebaseAuthGuard,
+      useExisting: FirebaseAuthGuard,
     },
   ],
 })
