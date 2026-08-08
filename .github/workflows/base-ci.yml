@@ -99,6 +99,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Generate Prisma client
+        run: pnpm prisma:generate
+
       - name: API integration tests
         run: pnpm --filter @rookie/api run test:integration:ci
 
@@ -128,6 +131,9 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Generate Prisma client
+        run: pnpm prisma:generate
 
       - name: API HTTP tests
         run: pnpm --filter @rookie/api run test:api:ci
