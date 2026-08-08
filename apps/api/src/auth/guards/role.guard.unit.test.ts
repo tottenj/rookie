@@ -29,140 +29,125 @@ describe('RolesGuard', () => {
   });
 
   describe('canActivate', () => {
-    it.each([[], undefined, null])(
-      'should allow access if no roles required',
-      (value) => {
-        const { context } =
-          createHttpExecutionContext<RequestWithOptionalAuthContext>();
-        reflector.getAllAndOverride.mockReturnValue(value);
-        expect(guard.canActivate(context)).toBe(true);
-        expect(reflector.getAllAndOverride).toHaveBeenCalledWith(
-          expect.any(String),
-          [context.getHandler(), context.getClass()],
-        );
+    it.each([[], undefined, null])('should allow access if no roles required', (value) => {
+      const { context } = createHttpExecutionContext<RequestWithOptionalAuthContext>();
+      reflector.getAllAndOverride.mockReturnValue(value);
+      expect(guard.canActivate(context)).toBe(true);
+      expect(reflector.getAllAndOverride).toHaveBeenCalledWith(expect.any(String), [
+        context.getHandler(),
+        context.getClass(),
+      ]);
 
-        const getRequestMock = context.switchToHttp().getRequest as jest.Mock;
-        expect(getRequestMock).not.toHaveBeenCalled();
-      },
-    );
+      const getRequestMock = context.switchToHttp().getRequest as jest.Mock;
+      expect(getRequestMock).not.toHaveBeenCalled();
+    });
 
     it('should throw if role and user is not present', () => {
-      const { context } =
-        createHttpExecutionContext<RequestWithOptionalAuthContext>();
+      const { context } = createHttpExecutionContext<RequestWithOptionalAuthContext>();
       reflector.getAllAndOverride.mockReturnValue([UserRole.ADMIN]);
 
-      expect(() => guard.canActivate(context)).toThrow(
-        'An application user is required for this route.',
-      );
+      expect(() => guard.canActivate(context)).toThrow('An application user is required for this route.');
 
-      expect(reflector.getAllAndOverride).toHaveBeenCalledWith(
-        expect.any(String),
-        [context.getHandler(), context.getClass()],
-      );
+      expect(reflector.getAllAndOverride).toHaveBeenCalledWith(expect.any(String), [
+        context.getHandler(),
+        context.getClass(),
+      ]);
 
       const getRequestMock = context.switchToHttp().getRequest as jest.Mock;
       expect(getRequestMock).toHaveBeenCalled();
     });
 
     it('should throw if users do not have the required role', () => {
-      const { context } =
-        createHttpExecutionContext<RequestWithOptionalAuthContext>({
-          request: {
-            authContext: {
-              principal: {
-                firebaseUid: 'firebase-uid',
-                email: '',
-                emailVerified: false,
-              },
-              user: {
-                id: 'user-id',
-                role: UserRole.USER,
-                firebaseUid: 'firebase-uid',
-                email: '',
-                status: 'ACTIVE',
-                profileId: null,
-              },
+      const { context } = createHttpExecutionContext<RequestWithOptionalAuthContext>({
+        request: {
+          authContext: {
+            principal: {
+              firebaseUid: 'firebase-uid',
+              email: '',
+              emailVerified: false,
+            },
+            user: {
+              id: 'user-id',
+              role: UserRole.USER,
+              firebaseUid: 'firebase-uid',
+              email: '',
+              status: 'ACTIVE',
+              profileId: null,
             },
           },
-        });
+        },
+      });
       reflector.getAllAndOverride.mockReturnValue([UserRole.ADMIN]);
-      expect(() => guard.canActivate(context)).toThrow(
-        'You do not have permission to access this route.',
-      );
+      expect(() => guard.canActivate(context)).toThrow('You do not have permission to access this route.');
 
-      expect(reflector.getAllAndOverride).toHaveBeenCalledWith(
-        expect.any(String),
-        [context.getHandler(), context.getClass()],
-      );
+      expect(reflector.getAllAndOverride).toHaveBeenCalledWith(expect.any(String), [
+        context.getHandler(),
+        context.getClass(),
+      ]);
 
       const getRequestMock = context.switchToHttp().getRequest as jest.Mock;
       expect(getRequestMock).toHaveBeenCalled();
     });
 
     it('should allow access if user has the required role', () => {
-      const { context } =
-        createHttpExecutionContext<RequestWithOptionalAuthContext>({
-          request: {
-            authContext: {
-              principal: {
-                firebaseUid: 'firebase-uid',
-                email: '',
-                emailVerified: false,
-              },
-              user: {
-                id: 'user-id',
-                role: UserRole.ADMIN,
-                firebaseUid: 'firebase-uid',
-                email: '',
-                status: 'ACTIVE',
-                profileId: null,
-              },
+      const { context } = createHttpExecutionContext<RequestWithOptionalAuthContext>({
+        request: {
+          authContext: {
+            principal: {
+              firebaseUid: 'firebase-uid',
+              email: '',
+              emailVerified: false,
+            },
+            user: {
+              id: 'user-id',
+              role: UserRole.ADMIN,
+              firebaseUid: 'firebase-uid',
+              email: '',
+              status: 'ACTIVE',
+              profileId: null,
             },
           },
-        });
+        },
+      });
       reflector.getAllAndOverride.mockReturnValue([UserRole.ADMIN]);
       expect(guard.canActivate(context)).toBe(true);
 
-      expect(reflector.getAllAndOverride).toHaveBeenCalledWith(
-        expect.any(String),
-        [context.getHandler(), context.getClass()],
-      );
+      expect(reflector.getAllAndOverride).toHaveBeenCalledWith(expect.any(String), [
+        context.getHandler(),
+        context.getClass(),
+      ]);
 
       const getRequestMock = context.switchToHttp().getRequest as jest.Mock;
       expect(getRequestMock).toHaveBeenCalled();
     });
 
     it('should allow access if user has one of the required roles', () => {
-      const { context } =
-        createHttpExecutionContext<RequestWithOptionalAuthContext>({
-          request: {
-            authContext: {
-              principal: {
-                firebaseUid: 'firebase-uid',
-                email: '',
-                emailVerified: false,
-              },
-              user: {
-                id: 'user-id',
-                role: UserRole.ADMIN,
-                firebaseUid: 'firebase-uid',
-                email: '',
-                status: 'ACTIVE',
-                profileId: null,
-              },
+      const { context } = createHttpExecutionContext<RequestWithOptionalAuthContext>({
+        request: {
+          authContext: {
+            principal: {
+              firebaseUid: 'firebase-uid',
+              email: '',
+              emailVerified: false,
+            },
+            user: {
+              id: 'user-id',
+              role: UserRole.ADMIN,
+              firebaseUid: 'firebase-uid',
+              email: '',
+              status: 'ACTIVE',
+              profileId: null,
             },
           },
-        });
-      reflector.getAllAndOverride.mockReturnValue([
-        UserRole.USER,
-        UserRole.ADMIN,
-      ]);
+        },
+      });
+      reflector.getAllAndOverride.mockReturnValue([UserRole.USER, UserRole.ADMIN]);
       expect(guard.canActivate(context)).toBe(true);
 
-      expect(reflector.getAllAndOverride).toHaveBeenCalledWith(
-        expect.any(String),
-        [context.getHandler(), context.getClass()],
-      );
+      expect(reflector.getAllAndOverride).toHaveBeenCalledWith(expect.any(String), [
+        context.getHandler(),
+        context.getClass(),
+      ]);
 
       const getRequestMock = context.switchToHttp().getRequest as jest.Mock;
       expect(getRequestMock).toHaveBeenCalled();

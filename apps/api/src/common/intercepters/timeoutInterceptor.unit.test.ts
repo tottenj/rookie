@@ -36,9 +36,7 @@ describe('TimeoutInterceptor', () => {
         handle: jest.fn().mockReturnValue(never()),
       };
 
-      const resultPromise = firstValueFrom(
-        interceptor.intercept(context, next),
-      );
+      const resultPromise = firstValueFrom(interceptor.intercept(context, next));
 
       const expectation = expect(resultPromise).rejects.toMatchObject({
         message: 'The request took too long to complete.',
@@ -47,9 +45,7 @@ describe('TimeoutInterceptor', () => {
       await jest.advanceTimersByTimeAsync(10_000);
 
       await expectation;
-      await expect(resultPromise).rejects.toBeInstanceOf(
-        RequestTimeoutException,
-      );
+      await expect(resultPromise).rejects.toBeInstanceOf(RequestTimeoutException);
 
       expect(next.handle).toHaveBeenCalledTimes(1);
     });
@@ -61,9 +57,7 @@ describe('TimeoutInterceptor', () => {
         handle: jest.fn().mockReturnValue(throwError(() => originalError)),
       };
 
-      const resultPromise = firstValueFrom(
-        interceptor.intercept(context, next),
-      );
+      const resultPromise = firstValueFrom(interceptor.intercept(context, next));
 
       await expect(resultPromise).rejects.toBe(originalError);
       expect(next.handle).toHaveBeenCalledTimes(1);

@@ -9,12 +9,12 @@ import { resetTestDatabase } from '../integration/reset-test-database';
 import { seedTestDatabase } from '../integration/seed-test-database';
 
 const mockFirebaseAuthService: Pick<FirebaseAuthService, 'verifyIdToken'> = {
-  verifyIdToken: async (token: string) =>
-    ({
+  verifyIdToken: (token: string) =>
+    Promise.resolve({
       uid: token,
       email: `${token}@test.local`,
       email_verified: true,
-    }) as DecodedIdToken,
+    } as DecodedIdToken),
 };
 
 let app: INestApplication;

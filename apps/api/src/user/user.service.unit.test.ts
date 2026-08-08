@@ -2,19 +2,11 @@ import { BadRequestException, ConflictException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { createAuthUserRowFactory } from '../../test/factories/auth/authUserRow.factory';
 import { createFirebasePrincipalFactory } from '../../test/factories/auth/firebasePrincipal.factory';
-import {
-  USER_REPOSITORY,
-  type UserRepositoryContract,
-} from './repository/user.repository.contract';
+import { USER_REPOSITORY, type UserRepositoryContract } from './repository/user.repository.contract';
 import { UserService } from './user.service';
 
 describe('UserService', () => {
-  let userRepository: jest.Mocked<
-    Pick<
-      UserRepositoryContract,
-      'findAuthUserByFirebaseUid' | 'createUserAccount'
-    >
-  >;
+  let userRepository: jest.Mocked<Pick<UserRepositoryContract, 'findAuthUserByFirebaseUid' | 'createUserAccount'>>;
 
   let userService: UserService;
 
@@ -46,9 +38,7 @@ describe('UserService', () => {
       const resultPromise = userService.create(principal);
 
       await expect(resultPromise).rejects.toBeInstanceOf(BadRequestException);
-      await expect(resultPromise).rejects.toThrow(
-        'The Firebase account does not have an email address.',
-      );
+      await expect(resultPromise).rejects.toThrow('The Firebase account does not have an email address.');
 
       expect(userRepository.findAuthUserByFirebaseUid).not.toHaveBeenCalled();
 
@@ -64,15 +54,11 @@ describe('UserService', () => {
       const resultPromise = userService.create(principal);
 
       await expect(resultPromise).rejects.toBeInstanceOf(ConflictException);
-      await expect(resultPromise).rejects.toThrow(
-        'A user account already exists for this Firebase account.',
-      );
+      await expect(resultPromise).rejects.toThrow('A user account already exists for this Firebase account.');
 
       expect(userRepository.findAuthUserByFirebaseUid).toHaveBeenCalledTimes(1);
 
-      expect(userRepository.findAuthUserByFirebaseUid).toHaveBeenCalledWith(
-        principal.firebaseUid,
-      );
+      expect(userRepository.findAuthUserByFirebaseUid).toHaveBeenCalledWith(principal.firebaseUid);
 
       expect(userRepository.createUserAccount).not.toHaveBeenCalled();
     });
@@ -87,16 +73,11 @@ describe('UserService', () => {
 
       expect(userRepository.findAuthUserByFirebaseUid).toHaveBeenCalledTimes(1);
 
-      expect(userRepository.findAuthUserByFirebaseUid).toHaveBeenCalledWith(
-        principal.firebaseUid,
-      );
+      expect(userRepository.findAuthUserByFirebaseUid).toHaveBeenCalledWith(principal.firebaseUid);
 
       expect(userRepository.createUserAccount).toHaveBeenCalledTimes(1);
 
-      expect(userRepository.createUserAccount).toHaveBeenCalledWith(
-        principal.firebaseUid,
-        principal.email,
-      );
+      expect(userRepository.createUserAccount).toHaveBeenCalledWith(principal.firebaseUid, principal.email);
     });
 
     it('throws BadRequestException when the email is an empty string', async () => {
@@ -107,9 +88,7 @@ describe('UserService', () => {
       const resultPromise = userService.create(principal);
 
       await expect(resultPromise).rejects.toBeInstanceOf(BadRequestException);
-      await expect(resultPromise).rejects.toThrow(
-        'The Firebase account does not have an email address.',
-      );
+      await expect(resultPromise).rejects.toThrow('The Firebase account does not have an email address.');
 
       expect(userRepository.findAuthUserByFirebaseUid).not.toHaveBeenCalled();
       expect(userRepository.createUserAccount).not.toHaveBeenCalled();
@@ -122,19 +101,12 @@ describe('UserService', () => {
       userRepository.findAuthUserByFirebaseUid.mockResolvedValue(null);
       userRepository.createUserAccount.mockRejectedValue(expectedError);
 
-      await expect(userService.create(principal)).rejects.toThrow(
-        expectedError,
-      );
+      await expect(userService.create(principal)).rejects.toThrow(expectedError);
 
       expect(userRepository.findAuthUserByFirebaseUid).toHaveBeenCalledTimes(1);
-      expect(userRepository.findAuthUserByFirebaseUid).toHaveBeenCalledWith(
-        principal.firebaseUid,
-      );
+      expect(userRepository.findAuthUserByFirebaseUid).toHaveBeenCalledWith(principal.firebaseUid);
       expect(userRepository.createUserAccount).toHaveBeenCalledTimes(1);
-      expect(userRepository.createUserAccount).toHaveBeenCalledWith(
-        principal.firebaseUid,
-        principal.email,
-      );
+      expect(userRepository.createUserAccount).toHaveBeenCalledWith(principal.firebaseUid, principal.email);
     });
   });
 
@@ -146,25 +118,19 @@ describe('UserService', () => {
 
   describe('findOne', () => {
     it('returns the expected placeholder response for a user id', () => {
-      expect(userService.findOne('abc123')).toBe(
-        'This action returns a #abc123 user',
-      );
+      expect(userService.findOne('abc123')).toBe('This action returns a #abc123 user');
     });
   });
 
   describe('update', () => {
     it('returns the expected placeholder response for a user id', () => {
-      expect(userService.update('abc123', {})).toBe(
-        'This action updates a #abc123 user',
-      );
+      expect(userService.update('abc123', {})).toBe('This action updates a #abc123 user');
     });
   });
 
   describe('remove', () => {
     it('returns the expected placeholder response for a user id', () => {
-      expect(userService.remove('abc123')).toBe(
-        'This action removes a #abc123 user',
-      );
+      expect(userService.remove('abc123')).toBe('This action removes a #abc123 user');
     });
   });
 });

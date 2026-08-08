@@ -2,11 +2,7 @@ import { spawnSync } from 'node:child_process';
 
 const isCi = process.argv.includes('--ci');
 
-function run(
-  command: string,
-  args: string[],
-  env: NodeJS.ProcessEnv = process.env,
-): void {
+function run(command: string, args: string[], env: NodeJS.ProcessEnv = process.env): void {
   const result = spawnSync(command, args, {
     stdio: 'inherit',
     shell: process.platform === 'win32',
