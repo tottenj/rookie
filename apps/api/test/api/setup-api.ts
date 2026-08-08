@@ -8,13 +8,8 @@ import { FirebaseAuthService } from '../../src/infrastructure/firebase/firebase-
 import { resetTestDatabase } from '../integration/reset-test-database';
 import { seedTestDatabase } from '../integration/seed-test-database';
 
-const mockFirebaseAuthService: Pick<FirebaseAuthService, 'verifyIdToken'> = {
-  verifyIdToken: (token: string) =>
-    Promise.resolve({
-      uid: token,
-      email: `${token}@test.local`,
-      email_verified: true,
-    } as DecodedIdToken),
+export const mockFirebaseAuthService = {
+  verifyIdToken: jest.fn<Promise<DecodedIdToken>, [token: string]>(),
 };
 
 let app: INestApplication;
@@ -44,6 +39,17 @@ beforeAll(async () => {
 });
 
 beforeEach(async () => {
+  jest.resetAllMocks();
+
+  mockFirebaseAuthService.verifyIdToken.mockImplementation(
+    async (token: string) =>
+      ({
+        uid: token,
+        email: `${token}@test.local`,
+        email_verified: true,
+      }) as DecodedIdToken,
+  );
+
   await resetTestDatabase(prisma);
   await seedTestDatabase(prisma);
 });

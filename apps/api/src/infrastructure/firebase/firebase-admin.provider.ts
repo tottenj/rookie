@@ -1,7 +1,7 @@
-import { getApps, type App } from 'firebase-admin/app';
+import { getApps, initializeApp, type App } from 'firebase-admin/app';
 import { FIREBASE_ADMIN_APP } from './firebase.constants';
 import { ConfigService } from '@nestjs/config';
-import { initializeApp } from 'firebase-admin';
+
 
 export const firebaseAdminProvider = {
   provide: FIREBASE_ADMIN_APP,
