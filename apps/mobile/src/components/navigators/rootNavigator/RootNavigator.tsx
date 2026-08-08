@@ -1,8 +1,8 @@
 // RootNavigator.tsx
-import { useAuth } from "@/lib/providers/authProvider/AuthProvider";
-import { Stack } from "expo-router";
-import * as SplashScreen from "expo-splash-screen";
-import { useEffect } from "react";
+import { useAuth } from '@/lib/providers/authProvider/AuthProvider';
+import { Stack } from 'expo-router';
+import * as SplashScreen from 'expo-splash-screen';
+import { useEffect } from 'react';
 
 export default function RootNavigator() {
   const { user, loading } = useAuth();

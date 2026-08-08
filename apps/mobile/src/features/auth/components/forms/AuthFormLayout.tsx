@@ -1,9 +1,9 @@
-import AppButton, { AppButtonLabel } from "@/components/ui/buttons/AppButton/AppButton";
-import AppParagraph from "@/components/ui/text/Paragraph/AppParagraph";
-import { Image } from "expo-image";
-import { Href, Link } from "expo-router";
-import { View } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
+import AppButton, { AppButtonLabel } from '@/components/ui/buttons/AppButton/AppButton';
+import AppParagraph from '@/components/ui/text/Paragraph/AppParagraph';
+import { Image } from 'expo-image';
+import { Href, Link } from 'expo-router';
+import { View } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 
 interface AuthFormLayoutProps {
   children: React.ReactNode;
@@ -32,12 +32,12 @@ export default function AuthFormLayout({
         paddingBottom: 32,
         paddingTop: 32,
         gap: 16,
-        justifyContent: "space-evenly",
+        justifyContent: 'space-evenly',
       }}
     >
       <View className="items-center pt-6">
         <Image
-          source={require("../../../../../assets/images/Apple_Music_Classical_iOS_26_icon.png")}
+          source={require('../../../../../assets/images/Apple_Music_Classical_iOS_26_icon.png')}
           style={{ width: 220, height: 220 }}
           contentFit="contain"
         />
@@ -46,7 +46,7 @@ export default function AuthFormLayout({
         {children}
 
         {submitButtonLabel && onSubmit && (
-          <AppButton testID={"submit-button"} isLoading={isLoading} onPress={onSubmit}>
+          <AppButton testID={'submit-button'} isLoading={isLoading} onPress={onSubmit}>
             <AppButtonLabel>{submitButtonLabel}</AppButtonLabel>
           </AppButton>
         )}

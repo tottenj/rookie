@@ -1,9 +1,9 @@
 ---
 name: heroui-migration
-description: "HeroUI v2 to v3 migration guide for agents. Use when migrating HeroUI v2 apps to v3, upgrading components, or accessing migration documentation. Keywords: HeroUI migration, v2 to v3, migration guide, upgrade HeroUI."
+description: 'HeroUI v2 to v3 migration guide for agents. Use when migrating HeroUI v2 apps to v3, upgrading components, or accessing migration documentation. Keywords: HeroUI migration, v2 to v3, migration guide, upgrade HeroUI.'
 metadata:
   author: heroui
-  version: "2.0.0"
+  version: '2.0.0'
   status: preview
 ---
 
@@ -27,14 +27,14 @@ curl -fsSL https://heroui.com/install | bash -s heroui-migration
 
 ### Key v2 → v3 Changes
 
-| Feature       | v2 (Migrate From)          | v3 (Migrate To)                        |
-| ------------- | -------------------------- | -------------------------------------- |
-| Provider      | `<HeroUIProvider>` required | **No Provider needed**                 |
-| Component API | Flat props: `<Card title="x">` | Compound: `<Card><Card.Header>`      |
-| Event handlers | `onClick`                 | `onPress`                              |
-| Styling       | `classNames` prop         | `className` prop                       |
-| Hooks         | `useSwitch`, `useDisclosure`, etc. | Compound components, `useOverlayState` |
-| Packages      | `@heroui/system`, `@heroui/theme` | `@heroui/react`, `@heroui/styles` |
+| Feature        | v2 (Migrate From)                  | v3 (Migrate To)                        |
+| -------------- | ---------------------------------- | -------------------------------------- |
+| Provider       | `<HeroUIProvider>` required        | **No Provider needed**                 |
+| Component API  | Flat props: `<Card title="x">`     | Compound: `<Card><Card.Header>`        |
+| Event handlers | `onClick`                          | `onPress`                              |
+| Styling        | `classNames` prop                  | `className` prop                       |
+| Hooks          | `useSwitch`, `useDisclosure`, etc. | Compound components, `useOverlayState` |
+| Packages       | `@heroui/system`, `@heroui/theme`  | `@heroui/react`, `@heroui/styles`      |
 
 ---
 

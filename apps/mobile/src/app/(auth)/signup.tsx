@@ -1,5 +1,5 @@
-import EmailSignUpForm from "@/features/auth/components/forms/emailSignUpForm/EmailSignUpForm";
-import { SafeAreaView } from "react-native-safe-area-context";
+import EmailSignUpForm from '@/features/auth/components/forms/emailSignUpForm/EmailSignUpForm';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Signup() {
   return (

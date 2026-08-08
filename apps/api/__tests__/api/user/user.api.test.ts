@@ -7,10 +7,7 @@ describe('User API', () => {
       const app = getApp();
       const prisma = getPrisma();
 
-      await request(app.getHttpServer())
-        .post('/user')
-        .set('Authorization', 'Bearer new-user')
-        .expect(201);
+      await request(app.getHttpServer()).post('/user').set('Authorization', 'Bearer new-user').expect(201);
 
       const createdUser = await prisma.user.findUnique({
         where: {
@@ -25,7 +22,6 @@ describe('User API', () => {
         firebaseUid: 'new-user',
         email: 'new-user@test.local',
       });
-      
     });
   });
 });

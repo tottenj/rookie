@@ -4,5 +4,4 @@ afterEach(() => {
 
 jest.setTimeout(10000);
 
-
-jest.mock("react-native-worklets", () => require("react-native-worklets/src/mock"));
+jest.mock('react-native-worklets', () => require('react-native-worklets/src/mock'));

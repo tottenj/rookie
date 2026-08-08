@@ -26,13 +26,7 @@ export const Header = ({ user, onLogin, onLogout, onCreateAccount }: HeaderProps
         ) : (
           <>
             <Button style={styles.button} size="small" onPress={onLogin} label="Log in" />
-            <Button
-              style={styles.button}
-              primary
-              size="small"
-              onPress={onCreateAccount}
-              label="Sign up"
-            />
+            <Button style={styles.button} primary size="small" onPress={onCreateAccount} label="Sign up" />
           </>
         )}
       </View>

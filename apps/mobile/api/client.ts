@@ -1,6 +1,6 @@
 // apps/mobile/api/client.ts
-import { getAuth } from "@react-native-firebase/auth";
-import axios from "axios";
+import { getAuth } from '@react-native-firebase/auth';
+import axios from 'axios';
 
 export const apiClient = axios.create({
   baseURL: process.env.EXPO_PUBLIC_API_URL!,

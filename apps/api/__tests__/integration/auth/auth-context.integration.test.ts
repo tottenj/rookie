@@ -23,7 +23,7 @@ describe('AuthContextService integration', () => {
         {
           provide: PrismaService,
           useValue: integrationPrisma,
-        }
+        },
       ],
     }).compile();
 

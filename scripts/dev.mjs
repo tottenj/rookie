@@ -1,10 +1,10 @@
 // scripts/dev.mjs
-import { spawn } from "node:child_process";
+import { spawn } from 'node:child_process';
 
 function spawnPnpm(args) {
-  return spawn("pnpm", args, {
-    stdio: "inherit",
-    shell: process.platform === "win32",
+  return spawn('pnpm', args, {
+    stdio: 'inherit',
+    shell: process.platform === 'win32',
   });
 }
 
@@ -17,9 +17,9 @@ function waitForExit(child) {
   }
 
   return new Promise((resolve, reject) => {
-    child.once("error", reject);
+    child.once('error', reject);
 
-    child.once("exit", (code, signal) => {
+    child.once('exit', (code, signal) => {
       resolve({ code, signal });
     });
   });
@@ -31,7 +31,7 @@ async function runPnpm(args) {
   try {
     return await waitForExit(child);
   } catch (error) {
-    console.error(`Failed to run: pnpm ${args.join(" ")}`);
+    console.error(`Failed to run: pnpm ${args.join(' ')}`);
     throw error;
   }
 }
@@ -60,38 +60,38 @@ async function waitForExitWithTimeout(child, timeoutMs) {
 function runCommandCapture(command, args) {
   return new Promise((resolve, reject) => {
     const child = spawn(command, args, {
-      shell: process.platform === "win32",
-      stdio: ["ignore", "pipe", "pipe"],
+      shell: process.platform === 'win32',
+      stdio: ['ignore', 'pipe', 'pipe'],
     });
 
-    let stdout = "";
-    let stderr = "";
+    let stdout = '';
+    let stderr = '';
 
-    child.stdout?.on("data", (chunk) => {
+    child.stdout?.on('data', (chunk) => {
       stdout += String(chunk);
     });
 
-    child.stderr?.on("data", (chunk) => {
+    child.stderr?.on('data', (chunk) => {
       stderr += String(chunk);
     });
 
-    child.once("error", reject);
+    child.once('error', reject);
 
-    child.once("exit", (code) => {
+    child.once('exit', (code) => {
       resolve({ code: code ?? 0, stdout, stderr });
     });
   });
 }
 
 async function getListeningPidsForPort(port) {
-  const result = await runCommandCapture("lsof", ["-nP", `-iTCP:${port}`, "-sTCP:LISTEN", "-t"]);
+  const result = await runCommandCapture('lsof', ['-nP', `-iTCP:${port}`, '-sTCP:LISTEN', '-t']);
 
   if (result.code !== 0 && !result.stdout.trim()) {
     return [];
   }
 
   return result.stdout
-    .split("\n")
+    .split('\n')
     .map((value) => Number.parseInt(value.trim(), 10))
     .filter((pid) => Number.isInteger(pid) && pid > 0 && pid !== process.pid);
 }
@@ -103,11 +103,11 @@ async function releasePort(port) {
     return;
   }
 
-  console.warn(`Releasing port ${port} by stopping PID(s): ${pids.join(", ")}`);
+  console.warn(`Releasing port ${port} by stopping PID(s): ${pids.join(', ')}`);
 
   for (const pid of pids) {
     try {
-      process.kill(pid, "SIGTERM");
+      process.kill(pid, 'SIGTERM');
     } catch {
       // Ignore stale PIDs and continue.
     }
@@ -119,7 +119,7 @@ async function releasePort(port) {
   const remainingPids = await getListeningPidsForPort(port);
   for (const pid of remainingPids) {
     try {
-      process.kill(pid, "SIGKILL");
+      process.kill(pid, 'SIGKILL');
     } catch {
       // Ignore stale PIDs and continue.
     }
@@ -154,7 +154,7 @@ async function main() {
   let cleanupPromise = null;
   let shutdownPromise = null;
 
-  async function stopChild(child, signal = "SIGINT") {
+  async function stopChild(child, signal = 'SIGINT') {
     if (!isRunning(child)) {
       return;
     }
@@ -166,14 +166,14 @@ async function main() {
       return;
     }
 
-    child.kill("SIGTERM");
+    child.kill('SIGTERM');
 
     const terminateResult = await waitForExitWithTimeout(child, 3000);
     if (!terminateResult.timedOut) {
       return;
     }
 
-    child.kill("SIGKILL");
+    child.kill('SIGKILL');
     await waitForExit(child);
   }
 
@@ -183,7 +183,7 @@ async function main() {
     }
 
     cleanupPromise = (async () => {
-      const down = await runPnpm(["run", "db:api:dev:down"]);
+      const down = await runPnpm(['run', 'db:api:dev:down']);
 
       if (down.code !== 0 && !down.signal) {
         console.error(`Database shutdown failed with exit code ${down.code}.`);
@@ -194,8 +194,8 @@ async function main() {
        * Stop the app watchers first. Firebase is stopped separately so it
        * receives exactly one intentional signal and can finish its export.
        */
-      await stopChild(appsChild, "SIGINT");
-      await stopChild(firebaseChild, "SIGINT");
+      await stopChild(appsChild, 'SIGINT');
+      await stopChild(firebaseChild, 'SIGINT');
     })();
 
     return cleanupPromise;
@@ -214,7 +214,7 @@ async function main() {
         await cleanup();
         process.exitCode = 0;
       } catch (error) {
-        console.error("Development environment cleanup failed:", error);
+        console.error('Development environment cleanup failed:', error);
         process.exitCode = 1;
       }
     })();
@@ -222,38 +222,38 @@ async function main() {
     return shutdownPromise;
   }
 
-  process.once("SIGINT", () => {
-    void handleSignal("SIGINT").finally(() => {
+  process.once('SIGINT', () => {
+    void handleSignal('SIGINT').finally(() => {
       process.exit(process.exitCode ?? 0);
     });
   });
 
-  process.once("SIGTERM", () => {
-    void handleSignal("SIGTERM").finally(() => {
+  process.once('SIGTERM', () => {
+    void handleSignal('SIGTERM').finally(() => {
       process.exit(process.exitCode ?? 0);
     });
   });
 
   await releaseDevPorts();
 
-  const up = await runPnpm(["run", "db:api:dev:up"]);
+  const up = await runPnpm(['run', 'db:api:dev:up']);
 
   if (up.code !== 0 || up.signal) {
-    console.error("Database startup failed.");
+    console.error('Database startup failed.');
     process.exitCode = up.code ?? 1;
     return;
   }
 
-  firebaseChild = spawnPnpm(["run", "emulators:persist"]);
-  appsChild = spawnPnpm(["run", "dev:apps"]);
+  firebaseChild = spawnPnpm(['run', 'emulators:persist']);
+  appsChild = spawnPnpm(['run', 'dev:apps']);
 
   const firstExit = await Promise.race([
     waitForExit(firebaseChild).then((result) => ({
-      process: "firebase",
+      process: 'firebase',
       ...result,
     })),
     waitForExit(appsChild).then((result) => ({
-      process: "apps",
+      process: 'apps',
       ...result,
     })),
   ]);
@@ -277,6 +277,6 @@ async function main() {
 }
 
 void main().catch((error) => {
-  console.error("Development environment failed:", error);
+  console.error('Development environment failed:', error);
   process.exitCode = 1;
 });

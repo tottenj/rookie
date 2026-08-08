@@ -16,6 +16,7 @@ src/app/profile-editor.tsx             ← regular Expo Router route, imports th
 ```
 
 `src/app/profile-editor.tsx`:
+
 ```tsx
 import ProfileEditor from '../components/ProfileEditor';
 export default ProfileEditor;
@@ -49,9 +50,9 @@ Or more simply, put the `Platform.OS` guard and the SwiftUI import in the same r
 - `RNHostView` is specifically for embedding RN components inside a SwiftUI tree. Example:
 
 ```jsx
-import { Host } from "@expo/ui";                       // Host always from universal root
-import { VStack, RNHostView } from "@expo/ui/swift-ui"; // platform components from swift-ui
-import { Pressable } from "react-native";
+import { Host } from '@expo/ui'; // Host always from universal root
+import { VStack, RNHostView } from '@expo/ui/swift-ui'; // platform components from swift-ui
+import { Pressable } from 'react-native';
 
 <Host matchContents>
   <VStack>

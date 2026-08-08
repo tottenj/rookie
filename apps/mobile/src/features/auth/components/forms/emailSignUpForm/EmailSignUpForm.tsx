@@ -1,11 +1,11 @@
-import EmailField from "@/components/inputs/emailField/EmailField";
-import PasswordField from "@/components/inputs/passwordField/PasswordField";
-import AppHeading from "@/components/ui/text/Heading/AppHeading";
-import AuthFormLayout from "@/features/auth/components/forms/AuthFormLayout";
-import { useSignUp } from "@/features/auth/hooks/useSignUp/useSignUp";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { emailSignUpSchema, EmailSignUpSchema } from "@rookie/shared-types";
-import { useForm } from "react-hook-form";
+import EmailField from '@/components/inputs/emailField/EmailField';
+import PasswordField from '@/components/inputs/passwordField/PasswordField';
+import AppHeading from '@/components/ui/text/Heading/AppHeading';
+import AuthFormLayout from '@/features/auth/components/forms/AuthFormLayout';
+import { useSignUp } from '@/features/auth/hooks/useSignUp/useSignUp';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { emailSignUpSchema, EmailSignUpSchema } from '@rookie/shared-types';
+import { useForm } from 'react-hook-form';
 
 export default function EmailSignUpForm() {
   const {
@@ -14,23 +14,30 @@ export default function EmailSignUpForm() {
     formState: { errors },
   } = useForm<EmailSignUpSchema>({
     resolver: zodResolver(emailSignUpSchema),
-    mode: "onBlur",
+    mode: 'onBlur',
     defaultValues: {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
     },
   });
 
   const { signUp, isLoading, errorMessage, error } = useSignUp();
   const onSubmit = handleSubmit((data) => {
-    console.log("Submitting sign-up form with data:", data);
+    console.log('Submitting sign-up form with data:', data);
     signUp(data);
-    console.log("Sign-up error:", error);
+    console.log('Sign-up error:', error);
   });
 
   return (
-    <AuthFormLayout linkText="Already have an account? Sign in" linkHref="/(auth)/signin" submitButtonLabel="Sign Up" isLoading={isLoading} errorMessage={errorMessage} onSubmit={onSubmit}>
-      <AppHeading type="h1">{"Sign Up"}</AppHeading>
+    <AuthFormLayout
+      linkText="Already have an account? Sign in"
+      linkHref="/(auth)/signin"
+      submitButtonLabel="Sign Up"
+      isLoading={isLoading}
+      errorMessage={errorMessage}
+      onSubmit={onSubmit}
+    >
+      <AppHeading type="h1">{'Sign Up'}</AppHeading>
       <EmailField control={control} errorMessage={errors.email?.message} />
       <PasswordField control={control} errorMessage={errors.password?.message} />
       <PasswordField control={control} name="confirmPassword" errorMessage={errors.confirmPassword?.message} />

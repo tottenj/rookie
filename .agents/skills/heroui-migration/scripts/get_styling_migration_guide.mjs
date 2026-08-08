@@ -10,16 +10,15 @@
  */
 
 const DOCS_BASE =
-  process.env.HEROUI_MIGRATION_DOCS_BASE ||
-  "https://heroui-git-docs-migration-heroui.vercel.app/docs/react/migration";
-const APP_PARAM = "app=migration-skills";
+  process.env.HEROUI_MIGRATION_DOCS_BASE || 'https://heroui-git-docs-migration-heroui.vercel.app/docs/react/migration';
+const APP_PARAM = 'app=migration-skills';
 
 async function fetchDoc(filename) {
   const url = `${DOCS_BASE}/${filename}?${APP_PARAM}`;
 
   try {
     const response = await fetch(url, {
-      headers: {"User-Agent": "HeroUI-Migration-Skill/1.0"},
+      headers: { 'User-Agent': 'HeroUI-Migration-Skill/1.0' },
       signal: AbortSignal.timeout(30000),
     });
 
@@ -34,9 +33,9 @@ async function fetchDoc(filename) {
 }
 
 async function main() {
-  const filename = "styling.mdx";
+  const filename = 'styling.mdx';
 
-  console.error("# Fetching styling migration guide...");
+  console.error('# Fetching styling migration guide...');
 
   try {
     const content = await fetchDoc(filename);

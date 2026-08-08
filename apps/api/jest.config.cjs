@@ -6,8 +6,7 @@ const commonConfig = {
   moduleNameMapper: {
     '^(\\.{1,2}/.*)\\.js$': '$1',
 
-    '^@rookie/shared-types$':
-      '<rootDir>/../../packages/shared-types/src/index.ts',
+    '^@rookie/shared-types$': '<rootDir>/../../packages/shared-types/src/index.ts',
   },
 
   testEnvironment: 'node',
@@ -45,10 +44,7 @@ module.exports = {
 
       displayName: 'api-integration',
 
-      testMatch: [
-        '<rootDir>/__tests__/integration/**/*.test.ts',
-        '<rootDir>/src/**/*.integration.test.ts',
-      ],
+      testMatch: ['<rootDir>/__tests__/integration/**/*.test.ts', '<rootDir>/src/**/*.integration.test.ts'],
 
       testPathIgnorePatterns: ['/node_modules/', '/dist/'],
 

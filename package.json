@@ -8,6 +8,8 @@
     "dev:apps": "turbo run dev",
     "build": "turbo run build",
     "lint": "turbo run lint",
+    "prettier:check": "prettier --check .",
+    "prettier:write": "prettier --write .",
     "typecheck": "turbo run typecheck",
     "test": "turbo run test",
     "test:unit": "turbo run test:unit",
@@ -46,6 +48,7 @@
     "concurrently": "^10.0.3",
     "eslint": "^9.39.4",
     "firebase-tools": "^15.23.0",
+    "prettier": "^3.4.2",
     "turbo": "^2.10.3"
   }
 }

@@ -145,9 +145,7 @@ Hidden from users but crucial for discoverability. Use comma-separated keywords 
 
 ```json
 {
-  "keywords": [
-    "finance,budget,expense,money,tracker,savings,bills,income,spending,wallet,personal,weekly,monthly"
-  ]
+  "keywords": ["finance,budget,expense,money,tracker,savings,bills,income,spending,wallet,personal,weekly,monthly"]
 }
 ```
 
@@ -266,7 +264,7 @@ Use JavaScript for dynamic values like copyright year or fetched translations.
 
 ```js
 // store.config.js
-const baseConfig = require("./store.config.json");
+const baseConfig = require('./store.config.json');
 
 const year = new Date().getFullYear();
 
@@ -284,12 +282,10 @@ module.exports = {
 ```js
 // store.config.js
 module.exports = async () => {
-  const baseConfig = require("./store.config.json");
+  const baseConfig = require('./store.config.json');
 
   // Fetch translations from CMS/localization service
-  const translations = await fetch(
-    "https://api.example.com/app-store-copy"
-  ).then((r) => r.json());
+  const translations = await fetch('https://api.example.com/app-store-copy').then((r) => r.json());
 
   return {
     ...baseConfig,
@@ -305,20 +301,18 @@ module.exports = async () => {
 
 ```js
 // store.config.js
-const baseConfig = require("./store.config.json");
+const baseConfig = require('./store.config.json');
 
-const isProduction = process.env.EAS_BUILD_PROFILE === "production";
+const isProduction = process.env.EAS_BUILD_PROFILE === 'production';
 
 module.exports = {
   ...baseConfig,
   apple: {
     ...baseConfig.apple,
     info: {
-      "en-US": {
-        ...baseConfig.apple.info["en-US"],
-        promoText: isProduction
-          ? "Download now and get started!"
-          : "[BETA] Help us test new features!",
+      'en-US': {
+        ...baseConfig.apple.info['en-US'],
+        promoText: isProduction ? 'Download now and get started!' : '[BETA] Help us test new features!',
       },
     },
   },

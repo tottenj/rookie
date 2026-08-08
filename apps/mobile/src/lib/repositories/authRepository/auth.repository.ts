@@ -1,7 +1,7 @@
 // apps/mobile/api/auth.repository.ts
-import { EmailSignInSchema } from "@rookie/shared-types";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "@react-native-firebase/auth";
-import { auth } from "../../../../lib/firebase/firebase";
+import { EmailSignInSchema } from '@rookie/shared-types';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from '@react-native-firebase/auth';
+import { auth } from '../../../../lib/firebase/firebase';
 
 export const AuthRepository = {
   signUp: async (data: { email: string; password: string }) => {

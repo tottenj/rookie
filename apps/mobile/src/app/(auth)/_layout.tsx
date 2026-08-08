@@ -1,4 +1,4 @@
-import { Stack } from "expo-router";
+import { Stack } from 'expo-router';
 
 export default function AuthLayout() {
   return (
@@ -10,5 +10,5 @@ export default function AuthLayout() {
   );
 }
 export const unstable_settings = {
-  anchor: "signin",
+  anchor: 'signin',
 };

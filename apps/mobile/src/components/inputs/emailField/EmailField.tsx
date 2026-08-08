@@ -1,5 +1,5 @@
-import AppTextField from "@/components/inputs/AppTextField/AppTextField";
-import { Control, Controller, Path } from "react-hook-form";
+import AppTextField from '@/components/inputs/AppTextField/AppTextField';
+import { Control, Controller, Path } from 'react-hook-form';
 
 interface HasEmail {
   email: string;
@@ -13,7 +13,7 @@ interface EmailFieldProps<T extends HasEmail> {
 
 export default function EmailField<T extends HasEmail>({
   control,
-  name = "email" as Path<T>,
+  name = 'email' as Path<T>,
   errorMessage,
 }: EmailFieldProps<T>) {
   return (
@@ -22,18 +22,18 @@ export default function EmailField<T extends HasEmail>({
       name={name}
       render={({ field: { onChange, onBlur, value } }) => (
         <AppTextField
-          testID={`${name ?? "email"}-field`}
+          testID={`${name ?? 'email'}-field`}
           label="Email"
           error={errorMessage}
           inputProps={{
-            testID: `${name ?? "email"}-input`,
+            testID: `${name ?? 'email'}-input`,
             value,
             onChangeText: onChange,
             onBlur,
-            placeholder: "Enter your email",
-            keyboardType: "email-address",
-            autoCapitalize: "none",
-            autoComplete: "email",
+            placeholder: 'Enter your email',
+            keyboardType: 'email-address',
+            autoCapitalize: 'none',
+            autoComplete: 'email',
           }}
         />
       )}

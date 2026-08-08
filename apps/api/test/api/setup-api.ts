@@ -41,13 +41,12 @@ beforeAll(async () => {
 beforeEach(async () => {
   jest.resetAllMocks();
 
-  mockFirebaseAuthService.verifyIdToken.mockImplementation(
-    async (token: string) =>
-      ({
-        uid: token,
-        email: `${token}@test.local`,
-        email_verified: true,
-      }) as DecodedIdToken,
+  mockFirebaseAuthService.verifyIdToken.mockImplementation((token: string) =>
+    Promise.resolve({
+      uid: token,
+      email: `${token}@test.local`,
+      email_verified: true,
+    } as DecodedIdToken),
   );
 
   await resetTestDatabase(prisma);

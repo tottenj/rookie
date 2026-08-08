@@ -1,10 +1,10 @@
-import { getApp } from "@react-native-firebase/app";
-import { connectAuthEmulator, getAuth } from "@react-native-firebase/auth";
-import { connectStorageEmulator, getStorage } from "@react-native-firebase/storage";
-import { connectFunctionsEmulator, getFunctions } from "@react-native-firebase/functions";
-import Constants from "expo-constants";
-import * as Device from "expo-device";
-import { Platform } from "react-native";
+import { getApp } from '@react-native-firebase/app';
+import { connectAuthEmulator, getAuth } from '@react-native-firebase/auth';
+import { connectStorageEmulator, getStorage } from '@react-native-firebase/storage';
+import { connectFunctionsEmulator, getFunctions } from '@react-native-firebase/functions';
+import Constants from 'expo-constants';
+import * as Device from 'expo-device';
+import { Platform } from 'react-native';
 
 export const firebaseApp = getApp();
 export const auth = getAuth(firebaseApp);
@@ -21,8 +21,8 @@ function getEmulatorHost() {
     return explicitHost;
   }
 
-  if (Platform.OS === "ios" && !Device.isDevice) {
-    return "127.0.0.1";
+  if (Platform.OS === 'ios' && !Device.isDevice) {
+    return '127.0.0.1';
   }
 
   const constants = Constants as unknown as {
@@ -37,13 +37,13 @@ function getEmulatorHost() {
     constants.manifest?.debuggerHost;
 
   if (runtimeHostUri) {
-    const host = runtimeHostUri.split(":")[0];
+    const host = runtimeHostUri.split(':')[0];
     if (host) {
       return host;
     }
   }
 
-  return Platform.OS === "android" ? "10.0.2.2" : "127.0.0.1";
+  return Platform.OS === 'android' ? '10.0.2.2' : '127.0.0.1';
 }
 
 if (__DEV__) {

@@ -1,5 +1,5 @@
-import { FieldError, Input, Label, TextField } from "heroui-native";
-import type { ComponentProps } from "react";
+import { FieldError, Input, Label, TextField } from 'heroui-native';
+import type { ComponentProps } from 'react';
 
 type AppTextFieldProps = ComponentProps<typeof TextField> & {
   label?: string;

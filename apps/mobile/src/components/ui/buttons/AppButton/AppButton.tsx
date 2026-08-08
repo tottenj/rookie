@@ -1,5 +1,5 @@
-import { Button, type ButtonRootProps, ButtonLabelProps, Spinner } from "heroui-native";
-import { View } from "react-native";
+import { Button, type ButtonRootProps, ButtonLabelProps, Spinner } from 'heroui-native';
+import { View } from 'react-native';
 
 type AppButtonProps = ButtonRootProps & {
   isLoading?: boolean;

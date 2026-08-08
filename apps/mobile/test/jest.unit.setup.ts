@@ -1,18 +1,18 @@
-import { notifyManager } from "@tanstack/react-query";
+import { notifyManager } from '@tanstack/react-query';
 
 notifyManager.setScheduler((callback) => callback());
 
-jest.mock("@react-native-firebase/functions", () => ({
+jest.mock('@react-native-firebase/functions', () => ({
   getFunctions: jest.fn(() => ({})),
   connectFunctionsEmulator: jest.fn(),
 }));
 
-jest.mock("@react-native-firebase/storage", () => ({
+jest.mock('@react-native-firebase/storage', () => ({
   getStorage: jest.fn(() => ({})),
   connectStorageEmulator: jest.fn(),
 }));
 
-jest.mock("@react-native-firebase/auth", () => ({
+jest.mock('@react-native-firebase/auth', () => ({
   getAuth: jest.fn(() => ({
     signOut: jest.fn(),
   })),
@@ -22,6 +22,6 @@ jest.mock("@react-native-firebase/auth", () => ({
   signInWithEmailAndPassword: jest.fn(),
 }));
 
-jest.mock("@react-native-firebase/app", () => ({
+jest.mock('@react-native-firebase/app', () => ({
   getApp: jest.fn(() => ({})),
 }));

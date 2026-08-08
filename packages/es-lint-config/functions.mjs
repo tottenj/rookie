@@ -1,8 +1,8 @@
-import { createApiConfig } from "./api.mjs";
+import { createApiConfig } from './api.mjs';
 
 export function createFunctionsConfig(options = {}) {
   return createApiConfig(options, {
-    ignores: ["eslint.config.mjs", "lib/**", "generated/**", "dist/**"],
+    ignores: ['eslint.config.mjs', 'lib/**', 'generated/**', 'dist/**'],
   });
 }
 

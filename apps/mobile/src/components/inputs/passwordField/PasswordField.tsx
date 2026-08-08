@@ -1,5 +1,5 @@
-import AppTextField from "@/components/inputs/AppTextField/AppTextField";
-import { Control, Controller, Path } from "react-hook-form";
+import AppTextField from '@/components/inputs/AppTextField/AppTextField';
+import { Control, Controller, Path } from 'react-hook-form';
 
 interface HasPassword {
   password: string;
@@ -13,7 +13,7 @@ interface PasswordFieldProps<T extends HasPassword> {
 
 export default function PasswordField<T extends HasPassword>({
   control,
-  name = "password" as Path<T>,
+  name = 'password' as Path<T>,
   errorMessage,
 }: PasswordFieldProps<T>) {
   return (
@@ -23,16 +23,16 @@ export default function PasswordField<T extends HasPassword>({
       render={({ field: { onChange, onBlur, value } }) => (
         <AppTextField
           label="Password"
-          testID={`${name ?? "password"}-field`}
+          testID={`${name ?? 'password'}-field`}
           error={errorMessage}
           inputProps={{
-            testID: `${name ?? "password"}-input`,
+            testID: `${name ?? 'password'}-input`,
             value,
             onChangeText: onChange,
             onBlur,
-            placeholder: "Password",
+            placeholder: 'Password',
             secureTextEntry: true,
-            autoComplete: "password",
+            autoComplete: 'password',
           }}
         />
       )}

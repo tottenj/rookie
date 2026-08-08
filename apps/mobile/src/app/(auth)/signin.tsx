@@ -1,5 +1,5 @@
-import EmailSignInForm from "@/features/auth/components/forms/emailSignInForm/EmailSignInForm";
-import { SafeAreaView } from "react-native-safe-area-context";
+import EmailSignInForm from '@/features/auth/components/forms/emailSignInForm/EmailSignInForm';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Signin() {
   return (
