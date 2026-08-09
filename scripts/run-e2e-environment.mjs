@@ -4,6 +4,8 @@ const isCi = process.argv.includes('--ci');
 const isStudio = process.argv.includes('--studio');
 const skipBuild = process.argv.includes('--skip-build');
 
+const E2E_IOS_APP_ID = 'com.jtotssteam.rookie.e2e';
+
 const e2eEnv = {
   ...process.env,
 
@@ -137,7 +139,29 @@ async function waitForMetro() {
 function buildAndInstallLocalE2eApp() {
   console.log('🛠 Generating E2E native project');
 
-  run('pnpm', ['--filter', '@rookie/mobile', 'exec', 'expo', 'prebuild', '--clean', '--platform', 'ios'], mobileE2eEnv);
+  run(
+    'pnpm',
+    [
+      '--filter',
+      '@rookie/mobile',
+      'exec',
+      'cross-env',
+      'APP_VARIANT=e2e',
+      'NODE_ENV=production',
+      'BABEL_ENV=production',
+      'EXPO_ROUTER_APP_ROOT=src/app',
+      'EXPO_PUBLIC_API_URL=http://127.0.0.1:3000',
+      'EXPO_PUBLIC_USE_FIREBASE_EMULATORS=true',
+      'EXPO_PUBLIC_FIREBASE_EMULATOR_HOST=127.0.0.1',
+      'EXPO_PUBLIC_E2E=true',
+      'expo',
+      'prebuild',
+      '--clean',
+      '--platform',
+      'ios',
+    ],
+    e2eEnv,
+  );
 
   console.log('🛠 Building and installing local E2E Release app');
 
@@ -147,6 +171,15 @@ function buildAndInstallLocalE2eApp() {
       '--filter',
       '@rookie/mobile',
       'exec',
+      'cross-env',
+      'APP_VARIANT=e2e',
+      'NODE_ENV=production',
+      'BABEL_ENV=production',
+      'EXPO_ROUTER_APP_ROOT=src/app',
+      'EXPO_PUBLIC_API_URL=http://127.0.0.1:3000',
+      'EXPO_PUBLIC_USE_FIREBASE_EMULATORS=true',
+      'EXPO_PUBLIC_FIREBASE_EMULATOR_HOST=127.0.0.1',
+      'EXPO_PUBLIC_E2E=true',
       'expo',
       'run:ios',
       '--configuration',
@@ -155,8 +188,37 @@ function buildAndInstallLocalE2eApp() {
       process.env.E2E_SIMULATOR_DEVICE ?? 'Rookie',
       '--no-bundler',
     ],
-    mobileE2eEnv,
+    e2eEnv,
   );
+
+  launchInstalledE2eIosApp();
+}
+
+function launchInstalledE2eIosApp() {
+  const device = process.env.E2E_SIMULATOR_DEVICE ?? 'booted';
+
+  run('xcrun', ['simctl', 'bootstatus', device, '-b']);
+
+  const launchResult = spawnSync('xcrun', ['simctl', 'launch', device, E2E_IOS_APP_ID], {
+    stdio: 'inherit',
+    shell: process.platform === 'win32',
+    env: e2eEnv,
+  });
+
+  if (launchResult.status === 0) {
+    return;
+  }
+
+  console.error('❌ Failed to launch expected E2E app id:', E2E_IOS_APP_ID);
+  console.error('🔎 Installed apps on simulator for debugging:');
+
+  spawnSync('xcrun', ['simctl', 'listapps', device], {
+    stdio: 'inherit',
+    shell: process.platform === 'win32',
+    env: e2eEnv,
+  });
+
+  throw new Error(`Expected iOS app id not launchable: ${E2E_IOS_APP_ID}`);
 }
 
 function runMaestroSuite() {
