@@ -22,6 +22,17 @@ const mobileE2eEnv = {
   EXPO_PUBLIC_E2E: 'true',
 };
 
+const mobileStudioEnv = {
+  ...e2eEnv,
+
+  APP_VARIANT: 'development',
+
+  EXPO_PUBLIC_API_URL: 'http://127.0.0.1:3000',
+  EXPO_PUBLIC_USE_FIREBASE_EMULATORS: 'true',
+  EXPO_PUBLIC_FIREBASE_EMULATOR_HOST: '127.0.0.1',
+  EXPO_PUBLIC_E2E: 'true',
+};
+
 function run(command, args, env = e2eEnv) {
   const result = spawnSync(command, args, {
     stdio: 'inherit',
@@ -88,11 +99,11 @@ function resetE2eEnvironment() {
   ]);
 }
 
-function startMetro() {
+function startMetro(env = mobileE2eEnv) {
   return spawn('pnpm', ['--filter', '@rookie/mobile', 'run', 'dev'], {
     stdio: 'inherit',
     shell: process.platform === 'win32',
-    env: mobileE2eEnv,
+    env,
   });
 }
 
@@ -118,6 +129,10 @@ async function waitForMetro() {
 }
 
 function buildAndInstallLocalE2eApp() {
+  console.log('🛠 Generating E2E native project');
+
+  run('pnpm', ['--filter', '@rookie/mobile', 'exec', 'expo', 'prebuild', '--clean', '--platform', 'ios'], mobileE2eEnv);
+
   console.log('🛠 Building and installing local E2E Release app');
 
   run(
@@ -141,11 +156,11 @@ function buildAndInstallLocalE2eApp() {
 function runMaestroSuite() {
   console.log('🚀 Running Maestro E2E suite');
 
-  run('maestro', ['test', 'apps/mobile/src/__tests__/e2e/maestro/flows']);
+  run('maestro', ['test', 'apps/mobile/src/__tests__/e2e/maestro']);
 }
 
 async function runStudioMode() {
-  const metroProcess = startMetro();
+  const metroProcess = startMetro(mobileStudioEnv);
 
   try {
     await waitForMetro();
@@ -170,8 +185,6 @@ async function runStudioMode() {
 }
 
 async function runSuiteMode() {
- 
-
   buildAndInstallLocalE2eApp();
 
   runMaestroSuite();

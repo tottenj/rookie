@@ -98,6 +98,8 @@
   "scripts": {
     "postinstall": "cd ../.. && pnpm turbo run build --filter=@rookie/mobile^...",
     "dev": "cross-env APP_VARIANT=development expo start --dev-client",
+    "ios:dev": "cross-env APP_VARIANT=development expo prebuild --clean --platform ios && cross-env APP_VARIANT=development expo run:ios",
+    "ios:e2e": "cross-env APP_VARIANT=e2e expo prebuild --clean --platform ios && cross-env APP_VARIANT=e2e expo run:ios --configuration Release",
     "start": "expo start",
     "prebuild": "expo prebuild",
     "prebuild:clean": "expo prebuild --clean",
