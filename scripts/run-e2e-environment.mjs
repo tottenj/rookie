@@ -17,6 +17,7 @@ const mobileE2eEnv = {
   ...e2eEnv,
 
   APP_VARIANT: 'e2e',
+  EXPO_ROUTER_APP_ROOT: 'src/app',
   EXPO_PUBLIC_API_URL: 'http://127.0.0.1:3000',
   EXPO_PUBLIC_USE_FIREBASE_EMULATORS: 'true',
   EXPO_PUBLIC_FIREBASE_EMULATOR_HOST: '127.0.0.1',
