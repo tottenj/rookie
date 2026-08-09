@@ -1,7 +1,7 @@
 import { ConfigService } from '@nestjs/config';
 import { PrismaService } from '../../src/infrastructure/database/prisma/prisma.service';
-import { resetTestDatabase } from './reset-test-database';
-import { seedTestDatabase } from './seed-test-database';
+import { resetTestDatabase } from '../database/reset-test-database';
+import { seedIntegrationTestDatabase } from './seed-integration-test-database';
 
 const configService = new ConfigService();
 
@@ -13,7 +13,7 @@ beforeAll(async () => {
 
 beforeEach(async () => {
   await resetTestDatabase(integrationPrisma);
-  await seedTestDatabase(integrationPrisma);
+  await seedIntegrationTestDatabase(integrationPrisma);
 });
 
 afterAll(async () => {

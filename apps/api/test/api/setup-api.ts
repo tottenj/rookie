@@ -5,8 +5,8 @@ import type { DecodedIdToken } from 'firebase-admin/auth';
 import { AppModule } from '../../src/app.module';
 import { PrismaService } from '../../src/infrastructure/database/prisma/prisma.service';
 import { FirebaseAuthService } from '../../src/infrastructure/firebase/firebase-auth.service';
-import { resetTestDatabase } from '../integration/reset-test-database';
-import { seedTestDatabase } from '../integration/seed-test-database';
+import { resetTestDatabase } from '../database/reset-test-database';
+import { seedIntegrationTestDatabase } from '../integration/seed-integration-test-database';
 
 export const mockFirebaseAuthService = {
   verifyIdToken: jest.fn<Promise<DecodedIdToken>, [token: string]>(),
@@ -50,7 +50,7 @@ beforeEach(async () => {
   );
 
   await resetTestDatabase(prisma);
-  await seedTestDatabase(prisma);
+  await seedIntegrationTestDatabase(prisma);
 });
 
 afterAll(async () => {

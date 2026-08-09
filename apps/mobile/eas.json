@@ -11,6 +11,22 @@
         "simulator": true
       }
     },
+    "e2e-test": {
+      "withoutCredentials": true,
+      "environment": "preview",
+      "env": {
+        "EXPO_PUBLIC_API_URL": "http://127.0.0.1:3000",
+        "EXPO_PUBLIC_USE_FIREBASE_EMULATORS": "true",
+        "EXPO_PUBLIC_FIREBASE_EMULATOR_HOST": "127.0.0.1",
+        "EXPO_PUBLIC_E2E": "true"
+      },
+      "ios": {
+        "simulator": true
+      },
+      "android": {
+        "buildType": "apk"
+      }
+    },
     "preview": {
       "distribution": "internal"
     },

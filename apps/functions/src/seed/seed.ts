@@ -1,9 +1,7 @@
-import { getApps, initializeApp } from 'firebase-admin/app';
-import { getAuth } from 'firebase-admin/auth';
 import { onRequest } from 'firebase-functions/v2/https';
+import { seedE2eAuth } from './seed-e2e-auth';
+    
 
-const app = getApps()[0] ?? initializeApp();
-const auth = getAuth(app);
 
 export const seed = onRequest(async (req, res) => {
   if (!process.env.FUNCTIONS_EMULATOR) {
@@ -14,18 +12,7 @@ export const seed = onRequest(async (req, res) => {
     throw new Error('Auth emulator is not running.');
   }
 
-  const SEEDUSERS = [
-    { email: 'user1@example.com', password: 'password1', uid: 'uid1' },
-    { email: 'user2@example.com', password: 'password2', uid: 'uid2' },
-  ];
-
-  for (const user of SEEDUSERS) {
-    await auth.createUser({
-      uid: user.uid,
-      email: user.email,
-      password: user.password,
-    });
-  }
+  await seedE2eAuth();
 
   res.send('Seed complete');
 });

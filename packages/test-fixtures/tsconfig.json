@@ -1,0 +1,11 @@
+{
+  "extends": "@rookie/tsconfig/base",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "declaration": true,
+    "rootDir": "./src",
+    "module": "ESNext",
+    "moduleResolution": "Bundler"
+  },
+  "include": ["src"]
+}

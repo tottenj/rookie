@@ -96,16 +96,18 @@
     "vitest": "^4.1.9"
   },
   "scripts": {
+    "postinstall": "cd ../.. && pnpm turbo run build --filter=@rookie/mobile^...",
     "dev": "expo start --dev-client",
-    "build:ios": "eas build --platform ios",
-    "build:android": "eas build --platform android",
-    "build": "expo export --platform ios --platform android --output-dir dist",
+    "start": "expo start",
     "prebuild": "expo prebuild",
     "prebuild:clean": "expo prebuild --clean",
-    "start": "expo start",
-    "reset-project": "node ./scripts/reset-project.js",
-    "android": "expo run:android",
     "ios": "expo run:ios",
+    "android": "expo run:android",
+    "build:ios:dev": "eas build --platform ios --profile development",
+    "build:ios:e2e": "eas build --platform ios --profile e2e-test",
+    "build:ios:production": "eas build --platform ios --profile production",
+    "export": "expo export --platform ios --platform android --output-dir dist",
+    "reset-project": "node ./scripts/reset-project.js",
     "web": "expo start --web",
     "lint": "expo lint",
     "typecheck": "tsc --noEmit -p tsconfig.json",
@@ -114,6 +116,7 @@
     "test:unit": "jest --config ./jest.config.cjs --selectProjects mobile-unit --passWithNoTests",
     "test:integration": "jest --config ./jest.config.cjs --selectProjects mobile-integration --passWithNoTests",
     "test:all": "jest --config ./jest.config.cjs --passWithNoTests",
+    "test:e2e": "maestro test src/__tests__/e2e/maestro/flows",
     "storybook:ios": "cross-env STORYBOOK_ENABLED=true expo start --ios",
     "storybook:android": "cross-env STORYBOOK_ENABLED=true expo start --android",
     "storybook": "storybook dev -p 6006",
@@ -123,7 +126,7 @@
     "packageManager": {
       "name": "pnpm",
       "version": "^11.10.0",
-      "onFail": "download"
+      "onFail": "warn"
     }
   },
   "private": true

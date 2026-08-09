@@ -34,7 +34,9 @@ export default function RootLayout() {
                   <RootNavigator />
                 </View>
               </AuthProvider>
-              <FloatingDevTools licenseKey={process.env.EXPO_PUBLIC_REACT_QUERY_DEVTOOLS_LICENSE_KEY!} />
+              {process.env.EXPO_PUBLIC_E2E !== 'true' && (
+                <FloatingDevTools licenseKey={process.env.EXPO_PUBLIC_REACT_QUERY_DEVTOOLS_LICENSE_KEY!} />
+              )}
             </QueryClientProvider>
           </ThemeProvider>
         </HeroUINativeProvider>

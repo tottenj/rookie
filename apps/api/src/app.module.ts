@@ -12,10 +12,12 @@ import { PrismaModule } from './infrastructure/database/prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
 import { FirebaseAuthGuard } from './auth/guards/firebase-auth.guard';
 import { TimeoutInterceptor } from './common/intercepters/timeoutInterceptor';
+import { HealthModule } from './health/health.module';
 
 @Module({
   imports: [
     AuthModule,
+    HealthModule,
     UserModule,
     ConfigModule.forRoot({
       isGlobal: true,

@@ -1,0 +1,9 @@
+appId: com.jtotssteam.rookie
+
+onFlowStart:
+  - launchApp:
+      clearState: true
+
+---
+
+- runFlow: ../subflows/sign-in-body.yaml
