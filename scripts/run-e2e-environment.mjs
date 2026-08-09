@@ -28,6 +28,7 @@ const mobileStudioEnv = {
   ...e2eEnv,
 
   APP_VARIANT: 'development',
+  EXPO_ROUTER_APP_ROOT: 'src/app',
 
   EXPO_PUBLIC_API_URL: 'http://127.0.0.1:3000',
   EXPO_PUBLIC_USE_FIREBASE_EMULATORS: 'true',
