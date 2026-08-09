@@ -1,4 +1,4 @@
-appId: com.jtotssteam.rookie
+appId: com.jtotssteam.rookie.e2e
 
 onFlowStart:
   - launchApp:
@@ -6,4 +6,4 @@ onFlowStart:
 
 ---
 
-- runFlow: ../subflows/sign-in-body.yaml
+- runFlow: ../subflows/sign-in.yaml

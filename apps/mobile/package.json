@@ -97,11 +97,11 @@
   },
   "scripts": {
     "postinstall": "cd ../.. && pnpm turbo run build --filter=@rookie/mobile^...",
-    "dev": "expo start --dev-client",
+    "dev": "cross-env APP_VARIANT=development expo start --dev-client",
     "start": "expo start",
     "prebuild": "expo prebuild",
     "prebuild:clean": "expo prebuild --clean",
-    "ios": "expo run:ios",
+    "ios": "cross-env APP_VARIANT=development expo run:ios",
     "android": "expo run:android",
     "build:ios:dev": "eas build --platform ios --profile development",
     "build:ios:e2e": "eas build --platform ios --profile e2e-test",
