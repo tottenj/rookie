@@ -1,7 +1,5 @@
 import { onRequest } from 'firebase-functions/v2/https';
 import { seedE2eAuth } from './seed-e2e-auth';
-    
-
 
 export const seed = onRequest(async (req, res) => {
   if (!process.env.FUNCTIONS_EMULATOR) {
