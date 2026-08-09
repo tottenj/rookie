@@ -2,6 +2,8 @@ import { spawnSync } from 'node:child_process';
 
 const isCi = process.argv.includes('--ci');
 const isStudio = process.argv.includes('--studio');
+const skipBuild = process.argv.includes('--skip-build');
+
 
 const e2eEnv = {
   ...process.env,
@@ -44,6 +46,10 @@ try {
 
   if (isCi) {
     childArgs.push('--ci');
+  }
+
+  if (skipBuild) {
+    childArgs.push('--skip-build');
   }
 
   run('pnpm', [

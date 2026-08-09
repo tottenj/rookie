@@ -1,1 +1,3 @@
-- assertVisible: "Sign In"
+appId: com.jtotssteam.rookie.e2e
+---
+- assertVisible: 'Sign In'

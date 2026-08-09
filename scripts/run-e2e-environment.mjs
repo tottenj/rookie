@@ -2,6 +2,7 @@ import { spawn, spawnSync } from 'node:child_process';
 
 const isCi = process.argv.includes('--ci');
 const isStudio = process.argv.includes('--studio');
+const skipBuild = process.argv.includes('--skip-build');
 
 const e2eEnv = {
   ...process.env,
@@ -156,7 +157,7 @@ function buildAndInstallLocalE2eApp() {
 function runMaestroSuite() {
   console.log('🚀 Running Maestro E2E suite');
 
-  run('maestro', ['test', 'apps/mobile/src/__tests__/e2e/maestro']);
+  run('maestro', ['test', 'apps/mobile/src/__tests__/e2e/maestro/flows']);
 }
 
 async function runStudioMode() {
@@ -185,8 +186,11 @@ async function runStudioMode() {
 }
 
 async function runSuiteMode() {
-  buildAndInstallLocalE2eApp();
-
+  if (!skipBuild) {
+    buildAndInstallLocalE2eApp();
+  } else {
+    console.log('⏭ Skipping E2E app build');
+  }
   runMaestroSuite();
 }
 
