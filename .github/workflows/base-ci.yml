@@ -141,6 +141,8 @@ jobs:
   mobile-unit-tests:
     runs-on: ubuntu-latest
     needs: quality
+    env:
+      EXPO_PUBLIC_API_URL: https://rookie-api.fly.dev
 
     steps:
       - name: Checkout
@@ -232,12 +234,6 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-
-      - name: Build test fixtures
-        run: pnpm --filter @rookie/test-fixtures run build
-
-      - name: Generate Prisma client
-        run: pnpm prisma:generate
 
       - name: Build test fixtures
         run: pnpm --filter @rookie/test-fixtures run build

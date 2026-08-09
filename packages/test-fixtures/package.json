@@ -21,6 +21,7 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@rookie/tsconfig": "workspace:*"
+    "@rookie/tsconfig": "workspace:*",
+    "typescript": "^7.0.2"
   }
 }
