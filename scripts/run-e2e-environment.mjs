@@ -1,16 +1,20 @@
 import { spawn, spawnSync } from 'node:child_process';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const isCi = process.argv.includes('--ci');
 const isStudio = process.argv.includes('--studio');
 const skipBuild = process.argv.includes('--skip-build');
 
 const E2E_IOS_APP_ID = 'com.jtotssteam.rookie.e2e';
+const MOBILE_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../apps/mobile');
 
 const e2eEnv = {
   ...process.env,
 
   ROOKIE_E2E: 'true',
   MAESTRO_DRIVER_STARTUP_TIMEOUT: '180000',
+
   FIREBASE_AUTH_EMULATOR_HOST: '127.0.0.1:9099',
   FIREBASE_STORAGE_EMULATOR_HOST: '127.0.0.1:9199',
 };
@@ -18,22 +22,12 @@ const e2eEnv = {
 const mobileE2eEnv = {
   ...e2eEnv,
 
-  // Ensure release bundling runs in production mode even when CI sets NODE_ENV=test.
+  // Release bundling should run in production mode even if CI uses NODE_ENV=test.
   NODE_ENV: 'production',
   BABEL_ENV: 'production',
 
   APP_VARIANT: 'e2e',
   EXPO_ROUTER_APP_ROOT: 'src/app',
-  EXPO_PUBLIC_API_URL: 'http://127.0.0.1:3000',
-  EXPO_PUBLIC_USE_FIREBASE_EMULATORS: 'true',
-  EXPO_PUBLIC_FIREBASE_EMULATOR_HOST: '127.0.0.1',
-  EXPO_PUBLIC_E2E: 'true',
-};
-
-const mobileStudioEnv = {
-  ...e2eEnv,
-
-  APP_VARIANT: 'development',
 
   EXPO_PUBLIC_API_URL: 'http://127.0.0.1:3000',
   EXPO_PUBLIC_USE_FIREBASE_EMULATORS: 'true',
@@ -46,11 +40,61 @@ function run(command, args, env = e2eEnv) {
     stdio: 'inherit',
     shell: process.platform === 'win32',
     env,
+    cwd: process.cwd(),
   });
 
   if (result.status !== 0) {
     throw new Error(`Command failed: ${command} ${args.join(' ')}`);
   }
+}
+
+function runInDirectory(command, args, cwd, env = e2eEnv) {
+  const result = spawnSync(command, args, {
+    stdio: 'inherit',
+    shell: process.platform === 'win32',
+    env,
+    cwd,
+  });
+
+  if (result.status !== 0) {
+    throw new Error(`Command failed in ${cwd}: ${command} ${args.join(' ')}`);
+  }
+}
+
+function verifyResolvedE2eBundleId() {
+  const result = spawnSync('pnpm', ['exec', 'expo', 'config', '--type', 'public', '--json'], {
+    stdio: 'pipe',
+    shell: process.platform === 'win32',
+    env: mobileE2eEnv,
+    cwd: MOBILE_DIR,
+    encoding: 'utf8',
+  });
+
+  if (result.status !== 0) {
+    const stderr = result.stderr?.toString() ?? '';
+
+    throw new Error(`Failed to resolve Expo config for E2E build. ${stderr}`);
+  }
+
+  const output = result.stdout?.toString() ?? '';
+
+  let parsed;
+
+  try {
+    parsed = JSON.parse(output);
+  } catch {
+    throw new Error(`Unable to parse Expo config JSON from ${MOBILE_DIR}`);
+  }
+
+  const resolvedBundleId = parsed?.ios?.bundleIdentifier;
+
+  if (resolvedBundleId !== E2E_IOS_APP_ID) {
+    throw new Error(
+      `Resolved wrong iOS bundle id for E2E build. expected=${E2E_IOS_APP_ID} actual=${resolvedBundleId ?? 'undefined'} cwd=${MOBILE_DIR}`,
+    );
+  }
+
+  console.log(`✅ Resolved E2E iOS bundle id: ${resolvedBundleId}`);
 }
 
 function startApi() {
@@ -86,6 +130,39 @@ async function waitForApiHealth() {
   throw new Error(`E2E API did not become healthy at ${url}`);
 }
 
+function startE2eControlServer() {
+  const args = isCi
+    ? ['--filter', '@rookie/api', 'run', 'test:e2e:control']
+    : ['--filter', '@rookie/api', 'exec', 'dotenv', '-e', '.env.test', '--', 'pnpm', 'run', 'test:e2e:control'];
+
+  return spawn('pnpm', args, {
+    stdio: 'inherit',
+    shell: process.platform === 'win32',
+    env: e2eEnv,
+  });
+}
+
+async function waitForE2eControlHealth() {
+  const url = 'http://127.0.0.1:3100/health';
+
+  for (let attempt = 0; attempt < 60; attempt += 1) {
+    try {
+      const response = await fetch(url);
+
+      if (response.ok) {
+        console.log('✅ E2E control server ready');
+        return;
+      }
+    } catch {
+      // Control server is still starting.
+    }
+
+    await sleep(500);
+  }
+
+  throw new Error(`E2E control server did not become healthy at ${url}`);
+}
+
 function resetE2eEnvironment() {
   if (isCi) {
     run('pnpm', ['--filter', '@rookie/api', 'run', 'test:e2e:environment:setup']);
@@ -107,79 +184,57 @@ function resetE2eEnvironment() {
   ]);
 }
 
-function startMetro(env = mobileE2eEnv) {
-  return spawn('pnpm', ['--filter', '@rookie/mobile', 'run', 'dev'], {
-    stdio: 'inherit',
-    shell: process.platform === 'win32',
-    env,
-  });
-}
-
-async function waitForMetro() {
-  const url = 'http://127.0.0.1:8081/status';
-
-  for (let attempt = 0; attempt < 60; attempt += 1) {
-    try {
-      const response = await fetch(url);
-
-      if (response.ok) {
-        console.log('✅ Metro ready');
-        return;
-      }
-    } catch {
-      // Metro is still starting.
-    }
-
-    await sleep(500);
-  }
-
-  throw new Error(`Metro did not become healthy at ${url}`);
-}
-
 function buildAndInstallLocalE2eApp() {
+  verifyResolvedE2eBundleId();
+
   console.log('🛠 Generating E2E native project');
 
-  run(
+  runInDirectory(
     'pnpm',
     [
-      '--filter',
-      '@rookie/mobile',
       'exec',
       'cross-env',
+
       'APP_VARIANT=e2e',
       'NODE_ENV=production',
       'BABEL_ENV=production',
+
       'EXPO_ROUTER_APP_ROOT=src/app',
+
       'EXPO_PUBLIC_API_URL=http://127.0.0.1:3000',
       'EXPO_PUBLIC_USE_FIREBASE_EMULATORS=true',
       'EXPO_PUBLIC_FIREBASE_EMULATOR_HOST=127.0.0.1',
       'EXPO_PUBLIC_E2E=true',
+
       'expo',
       'prebuild',
       '--clean',
       '--platform',
       'ios',
     ],
+    MOBILE_DIR,
     e2eEnv,
   );
 
   console.log('🛠 Building and installing local E2E Release app');
 
-  run(
+  runInDirectory(
     'pnpm',
     [
-      '--filter',
-      '@rookie/mobile',
       'exec',
       'cross-env',
+
       'APP_VARIANT=e2e',
       'NODE_ENV=production',
       'BABEL_ENV=production',
+
       'EXPO_ROUTER_APP_ROOT=src/app',
+
       'EXPO_PUBLIC_API_URL=http://127.0.0.1:3000',
       'EXPO_PUBLIC_USE_FIREBASE_EMULATORS=true',
       'EXPO_PUBLIC_FIREBASE_EMULATOR_HOST=127.0.0.1',
       'EXPO_PUBLIC_E2E=true',
+
       'expo',
       'run:ios',
       '--configuration',
@@ -188,10 +243,9 @@ function buildAndInstallLocalE2eApp() {
       process.env.E2E_SIMULATOR_DEVICE ?? 'Rookie',
       '--no-bundler',
     ],
+    MOBILE_DIR,
     e2eEnv,
   );
-
-  launchInstalledE2eIosApp();
 }
 
 function launchInstalledE2eIosApp() {
@@ -210,6 +264,7 @@ function launchInstalledE2eIosApp() {
   }
 
   console.error('❌ Failed to launch expected E2E app id:', E2E_IOS_APP_ID);
+
   console.error('🔎 Installed apps on simulator for debugging:');
 
   spawnSync('xcrun', ['simctl', 'listapps', device], {
@@ -221,6 +276,16 @@ function launchInstalledE2eIosApp() {
   throw new Error(`Expected iOS app id not launchable: ${E2E_IOS_APP_ID}`);
 }
 
+function prepareE2eApp() {
+  if (!skipBuild) {
+    buildAndInstallLocalE2eApp();
+  } else {
+    console.log('⏭ Skipping E2E app build');
+  }
+
+  launchInstalledE2eIosApp();
+}
+
 function runMaestroSuite() {
   console.log('🚀 Running Maestro E2E suite');
 
@@ -228,36 +293,25 @@ function runMaestroSuite() {
 }
 
 async function runStudioMode() {
-  const metroProcess = startMetro(mobileStudioEnv);
+  prepareE2eApp();
 
-  try {
-    await waitForMetro();
+  console.log('');
+  console.log('✅ Maestro Studio environment ready');
+  console.log('');
+  console.log(`Using E2E app: ${E2E_IOS_APP_ID}`);
+  console.log('');
+  console.log('In another terminal run:');
+  console.log('');
+  console.log('  maestro studio');
+  console.log('');
+  console.log('Press Ctrl+C here when finished.');
+  console.log('');
 
-    console.log('');
-    console.log('✅ Maestro Studio environment ready');
-    console.log('');
-    console.log('Use your existing Rookie development client.');
-    console.log('Make sure Rookie is loaded in the simulator.');
-    console.log('');
-    console.log('Then, in another terminal:');
-    console.log('');
-    console.log('  maestro studio');
-    console.log('');
-    console.log('Press Ctrl+C here when finished.');
-    console.log('');
-
-    await waitUntilStopped();
-  } finally {
-    metroProcess.kill('SIGTERM');
-  }
+  await waitUntilStopped();
 }
 
-async function runSuiteMode() {
-  if (!skipBuild) {
-    buildAndInstallLocalE2eApp();
-  } else {
-    console.log('⏭ Skipping E2E app build');
-  }
+function runSuiteMode() {
+  prepareE2eApp();
   runMaestroSuite();
 }
 
@@ -268,10 +322,10 @@ function waitUntilStopped() {
   });
 }
 
-function waitForProcessExit(childProcess) {
+function waitForProcessExit(childProcess, name) {
   return new Promise((_, reject) => {
     childProcess.once('exit', (code, signal) => {
-      reject(new Error(`E2E API exited unexpectedly. code=${code} signal=${signal}`));
+      reject(new Error(`${name} exited unexpectedly. code=${code} signal=${signal}`));
     });
   });
 }
@@ -283,17 +337,23 @@ function sleep(ms) {
 resetE2eEnvironment();
 
 const apiProcess = startApi();
+const controlProcess = startE2eControlServer();
 
 try {
-  await Promise.race([waitForApiHealth(), waitForProcessExit(apiProcess)]);
+  await Promise.race([
+    Promise.all([waitForApiHealth(), waitForE2eControlHealth()]),
+    waitForProcessExit(apiProcess, 'E2E API'),
+    waitForProcessExit(controlProcess, 'E2E control server'),
+  ]);
 
   console.log('✅ E2E backend environment ready');
 
   if (isStudio) {
     await runStudioMode();
   } else {
-    await runSuiteMode();
+    runSuiteMode();
   }
 } finally {
   apiProcess.kill('SIGTERM');
+  controlProcess.kill('SIGTERM');
 }

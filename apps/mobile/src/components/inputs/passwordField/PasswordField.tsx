@@ -1,6 +1,11 @@
 import AppTextField from '@/components/inputs/AppTextField/AppTextField';
 import { Control, Controller, Path } from 'react-hook-form';
 
+
+
+const isE2E = process.env.EXPO_PUBLIC_E2E === 'true';
+
+
 interface HasPassword {
   password: string;
 }
@@ -23,16 +28,18 @@ export default function PasswordField<T extends HasPassword>({
       render={({ field: { onChange, onBlur, value } }) => (
         <AppTextField
           label="Password"
+
           testID={`${name ?? 'password'}-field`}
           error={errorMessage}
           inputProps={{
+            textContentType: isE2E ? 'none' : 'emailAddress',
             testID: `${name ?? 'password'}-input`,
             value,
             onChangeText: onChange,
             onBlur,
             placeholder: 'Password',
             secureTextEntry: true,
-            autoComplete: 'password',
+            autoComplete: isE2E ? 'off' : 'password',
           }}
         />
       )}

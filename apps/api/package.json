@@ -30,6 +30,7 @@
     "test:api:run": "jest --config ./jest.config.cjs --selectProjects api-api --passWithNoTests",
     "test:integration:setup": "docker compose -f ./compose.test.yaml up -d --wait",
     "test:integration:teardown": "docker compose -f ./compose.test.yaml down -v",
+    "test:e2e:control": "tsx test/e2e/e2e-control-server.ts",
     "test:all": "jest --config ./jest.config.cjs",
     "test": "jest --config ./jest.config.cjs --selectProjects api-unit --passWithNoTests",
     "db:dev:up": "docker compose -f ./compose.yaml up -d --wait",

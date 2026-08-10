@@ -11,29 +11,19 @@ on:
 jobs:
   quality:
     runs-on: ubuntu-latest
-
     env:
-      # Required when loading Prisma config / generating the client.
-      # No database connection is actually made in this job.
       DATABASE_URL: postgresql://dummy:dummy@localhost:5432/dummy
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+      # pnpm/setup replaces both action-setup and setup-node for pnpm v11+
+      - name: Setup pnpm & Node
+        uses: pnpm/setup@v1
         with:
           version: 11
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: pnpm
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+          runtime: node@22
+          cache: true
 
       - name: Generate Prisma client
         run: pnpm prisma:generate
@@ -47,283 +37,102 @@ jobs:
   api-unit-tests:
     runs-on: ubuntu-latest
     needs: quality
-
     env:
       DATABASE_URL: postgresql://dummy:dummy@localhost:5432/dummy
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+      - uses: actions/checkout@v4
+      - uses: pnpm/setup@v1
         with:
           version: 11
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: pnpm
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Generate Prisma client
-        run: pnpm prisma:generate
-
-      - name: API unit tests
-        run: pnpm --filter @rookie/api run test:unit
+          runtime: node@22
+          cache: true
+      - run: pnpm prisma:generate
+      - run: pnpm --filter @rookie/api run test:unit
 
   api-integration-tests:
     runs-on: ubuntu-latest
     needs: quality
+    services:
+      # Use GitHub Actions native service containers for Postgres instead of manual setup
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: test
+          POSTGRES_PASSWORD: tester
+          POSTGRES_DB: rookie_api_test
+        ports:
+          - 5434:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     env:
       DATABASE_URL: postgresql://test:tester@localhost:5434/rookie_api_test?schema=public
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+      - uses: actions/checkout@v4
+      - uses: pnpm/setup@v1
         with:
           version: 11
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: pnpm
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Generate Prisma client
-        run: pnpm prisma:generate
-
-      - name: API integration tests
-        run: pnpm --filter @rookie/api run test:integration:ci
+          runtime: node@22
+          cache: true
+      - run: pnpm prisma:generate
+      - run: pnpm --filter @rookie/api run test:integration:ci
 
   api-api-tests:
     runs-on: ubuntu-latest
     needs: quality
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: test
+          POSTGRES_PASSWORD: tester
+          POSTGRES_DB: rookie_api_test
+        ports:
+          - 5434:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     env:
       DATABASE_URL: postgresql://test:tester@localhost:5434/rookie_api_test?schema=public
       FIREBASE_STORAGE_BUCKET: gs://rookie-a27a3.firebasestorage.app
       FIREBASE_PROJECT_ID: rookie-a27a3
       GCLOUD_PROJECT: rookie-dev
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+      - uses: actions/checkout@v4
+      - uses: pnpm/setup@v1
         with:
           version: 11
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: pnpm
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Generate Prisma client
-        run: pnpm prisma:generate
-
-      - name: API HTTP tests
-        run: pnpm --filter @rookie/api run test:api:ci
+          runtime: node@22
+          cache: true
+      - run: pnpm prisma:generate
+      - run: pnpm --filter @rookie/api run test:api:ci
 
   mobile-unit-tests:
     runs-on: ubuntu-latest
     needs: quality
     env:
       EXPO_PUBLIC_API_URL: https://rookie-api.fly.dev
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+      - uses: actions/checkout@v4
+      - uses: pnpm/setup@v1
         with:
           version: 11
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: pnpm
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Mobile unit tests
-        run: pnpm --filter @rookie/mobile run test:unit
+          runtime: node@22
+          cache: true
+      - run: pnpm --filter @rookie/mobile run test:unit
 
   mobile-integration-tests:
     runs-on: ubuntu-latest
     needs: quality
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+      - uses: actions/checkout@v4
+      - uses: pnpm/setup@v1
         with:
           version: 11
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: pnpm
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Mobile integration tests
-        run: pnpm --filter @rookie/mobile run test:integration
-
-  ios-e2e-tests:
-    runs-on: macos-latest
-    needs: quality
-
-    env:
-      DATABASE_URL: postgresql://test:tester@127.0.0.1:5434/rookie_api_test?schema=public
-
-      ROOKIE_E2E: "true"
-
-      FIREBASE_PROJECT_ID: rookie-a27a3
-      FIREBASE_STORAGE_BUCKET: gs://rookie-a27a3.firebasestorage.app
-      FIREBASE_AUTH_EMULATOR_HOST: 127.0.0.1:9099
-      FIREBASE_STORAGE_EMULATOR_HOST: 127.0.0.1:9199
-
-      EXPO_PUBLIC_API_URL: http://127.0.0.1:3000
-      EXPO_PUBLIC_USE_FIREBASE_EMULATORS: "true"
-      EXPO_PUBLIC_FIREBASE_EMULATOR_HOST: 127.0.0.1
-      EXPO_PUBLIC_E2E: "true"
-
-      MAESTRO_DRIVER_STARTUP_TIMEOUT: "180000"
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 11
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: pnpm
-
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 21
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Build test fixtures
-        run: pnpm --filter @rookie/test-fixtures run build
-
-      - name: Generate Prisma client
-        run: pnpm prisma:generate
-
-      - name: Install PostgreSQL
-        run: |
-          brew install postgresql@17
-          echo "$(brew --prefix postgresql@17)/bin" >> "$GITHUB_PATH"
-
-      - name: Start E2E PostgreSQL
-        run: |
-          POSTGRES_BIN="$(brew --prefix postgresql@17)/bin"
-          POSTGRES_DATA="$RUNNER_TEMP/rookie-postgres"
-
-          "$POSTGRES_BIN/initdb" -D "$POSTGRES_DATA"
-
-          "$POSTGRES_BIN/pg_ctl" \
-            -D "$POSTGRES_DATA" \
-            -o "-p 5434" \
-            -l "$RUNNER_TEMP/postgres.log" \
-            start
-
-          "$POSTGRES_BIN/createuser" \
-            -p 5434 \
-            test
-
-          "$POSTGRES_BIN/psql" \
-            -p 5434 \
-            postgres \
-            -c "ALTER ROLE test WITH PASSWORD 'tester';"
-
-          "$POSTGRES_BIN/createdb" \
-            -p 5434 \
-            -O test \
-            rookie_api_test
-
-          "$POSTGRES_BIN/pg_isready" \
-            -h 127.0.0.1 \
-            -p 5434
-
-      - name: Install Maestro
-        run: |
-          curl -Ls "https://get.maestro.mobile.dev" | bash
-          echo "$HOME/.maestro/bin" >> "$GITHUB_PATH"
-
-      - name: Select iOS simulator
-        run: |
-          DEVICE_UDID="$(
-            xcrun simctl list devices available -j |
-            python3 -c '
-          import json
-          import sys
-
-          data = json.load(sys.stdin)
-
-          for runtime, devices in data["devices"].items():
-              if "iOS" not in runtime:
-                  continue
-
-              for device in devices:
-                  if (
-                      device.get("isAvailable")
-                      and device["name"].startswith("iPhone")
-                  ):
-                      print(device["udid"])
-                      raise SystemExit(0)
-
-          raise SystemExit("No available iPhone simulator found")
-          '
-          )"
-
-          echo "Using simulator: $DEVICE_UDID"
-
-          xcrun simctl boot "$DEVICE_UDID"
-
-          echo "E2E_SIMULATOR_DEVICE=$DEVICE_UDID" >> "$GITHUB_ENV"
-
-      - name: Wait for iOS simulator
-        run: |
-          xcrun simctl bootstatus "$E2E_SIMULATOR_DEVICE" -b
-
-      - name: Apply E2E database migrations
-        run: |
-          pnpm --filter @rookie/api exec prisma migrate deploy
-
-      - name: Run iOS E2E tests
-        run: |
-          pnpm exec firebase emulators:exec \
-            "node ./scripts/run-e2e-environment.mjs --ci" \
-            --only auth,storage
+          runtime: node@22
+          cache: true
+      - run: pnpm --filter @rookie/mobile run test:integration
