@@ -1,0 +1,17 @@
+appId: com.jtotssteam.rookie.e2e
+onFlowStart:
+  - runFlow:
+      file: ../../../subflows/utils/setup.yaml
+---
+
+- openLink: 'rookie-e2e://signin'
+- assertVisible: 'Sign In'
+
+- runFlow:
+    file: ../../../subflows/auth/fill-in-signin-form.yaml
+    env:
+      EMAIL: 'unregistered@example.com'
+      PASSWORD: 'invalidpassword'
+
+- assertVisible:
+    text: 'No account found with that email.'

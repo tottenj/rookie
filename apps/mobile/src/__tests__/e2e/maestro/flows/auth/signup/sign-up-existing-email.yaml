@@ -16,4 +16,4 @@ onFlowStart:
       CONFIRM_PASSWORD: ${MAESTRO_E2E_STANDARD_PASSWORD}
 
 - assertVisible:
-    text: 'That email is already registered'
+    text: 'That email is already registered.'

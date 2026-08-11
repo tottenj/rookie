@@ -44,6 +44,7 @@ const { standard } = E2E_USERS;
 const maestroEnv = {
   ...e2eEnv,
 
+  MAESTRO_E2E_STANDARD_FIREBASE_UID: standard.firebaseUid,
   MAESTRO_E2E_STANDARD_EMAIL: standard.email,
   MAESTRO_E2E_STANDARD_PASSWORD: standard.password,
   MAESTRO_E2E_STANDARD_USERNAME: standard.username,

@@ -1,6 +1,8 @@
 async function waitForControlServer() {
   const url = 'http://127.0.0.1:3100/health';
 
+  console.log("QUERYING FOR HEALTH");
+
   for (let attempt = 0; attempt < 60; attempt += 1) {
     try {
       const response = await fetch(url);
@@ -19,11 +21,16 @@ async function waitForControlServer() {
 }
 
 async function resetE2eEnvironment() {
+  console.log("WAITING FOR CONTROL SERVER");
   await waitForControlServer();
+  
 
   const response = await fetch('http://127.0.0.1:3100/reset', {
     method: 'POST',
   });
+
+  console.log(response);
+  console.log(await response.text());
 
   if (!response.ok) {
     const errorText = await response.text();

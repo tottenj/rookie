@@ -15,3 +15,7 @@ onFlowStart:
 
 - assertVisible:
     text: 'Invalid email address'
+
+
+- assertNotVisible:
+    text: 'No account found with that email.'

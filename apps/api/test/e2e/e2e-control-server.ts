@@ -10,6 +10,8 @@ const server = createServer(async (request, response) => {
     try {
       console.log('🧹 Resetting E2E environment');
 
+      console.log("LKSdjfslkjflkjsklfjlsjflkjskljfls")
+
       await resetAndSeedE2eEnvironment();
 
       response.writeHead(204);
