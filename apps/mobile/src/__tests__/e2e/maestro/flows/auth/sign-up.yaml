@@ -1,6 +1,0 @@
-appId: com.jtotssteam.rookie.e2e
----
-- launchApp
-
-- runFlow:
-    file: ../../subflows/auth/sign-up-body.yaml

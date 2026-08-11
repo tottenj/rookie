@@ -25,7 +25,6 @@ export default function EmailSignUpForm() {
   const onSubmit = handleSubmit((data) => {
     console.log('Submitting sign-up form with data:', data);
     signUp(data);
-    console.log('Sign-up error:', error);
   });
 
   return (

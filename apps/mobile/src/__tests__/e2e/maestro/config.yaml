@@ -1,5 +1,3 @@
 flows:
-  - flows/*
+  - flows/**
 
-onFlowStart:
-  - runScript: .maestro/reset-e2e-environment.js

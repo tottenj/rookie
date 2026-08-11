@@ -8,9 +8,8 @@ export type UpdateUserDto = Partial<{
 }>;
 
 export const UsersRepository = {
-  create: async (data: CreateUser): Promise<AppUser> => {
-    const res = await apiClient.post<AppUser>('/users', data);
-    return res.data;
+  create: async (): Promise<void> => {
+    await apiClient.post<void>('/user');
   },
 
   getMe: async (): Promise<AppUser> => {

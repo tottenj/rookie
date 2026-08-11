@@ -3,8 +3,6 @@ import { Control, Controller, Path } from 'react-hook-form';
 
 
 
-const isE2E = process.env.EXPO_PUBLIC_E2E === 'true';
-
 
 interface HasPassword {
   password: string;
@@ -30,16 +28,16 @@ export default function PasswordField<T extends HasPassword>({
           label="Password"
 
           testID={`${name ?? 'password'}-field`}
-          error={errorMessage}
+          error={errorMessage ?? ''}
           inputProps={{
-            textContentType: isE2E ? 'none' : 'emailAddress',
+            textContentType: 'password',
             testID: `${name ?? 'password'}-input`,
             value,
             onChangeText: onChange,
             onBlur,
             placeholder: 'Password',
             secureTextEntry: true,
-            autoComplete: isE2E ? 'off' : 'password',
+            autoComplete: 'password',
           }}
         />
       )}

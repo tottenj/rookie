@@ -1,24 +1,25 @@
 appId: com.jtotssteam.rookie.e2e
 ---
-- openLink: 'rookie-e2e://signup'
-
-- assertVisible: 'Sign Up'
 
 - tapOn:
     id: 'email-input'
-- inputText: 'test@example.com'
+
+- inputText: ${EMAIL}
 
 - hideKeyboard
 
 - tapOn:
     id: 'password-input'
-- inputText: 'password123'
+
+- inputText: ${PASSWORD}
 
 - hideKeyboard
 
 - tapOn:
     id: 'confirmPassword-input'
-- inputText: 'password123'
+
+
+- inputText: ${CONFIRM_PASSWORD}
 
 - hideKeyboard
 
@@ -27,3 +28,4 @@ appId: com.jtotssteam.rookie.e2e
 
 - tapOn:
     id: 'submit-button'
+    enabled: true

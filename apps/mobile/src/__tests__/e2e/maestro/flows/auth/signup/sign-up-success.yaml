@@ -1,0 +1,16 @@
+appId: com.jtotssteam.rookie.e2e
+onFlowStart:
+  - runFlow:
+      file: ../../../subflows/utils/setup.yaml
+---
+
+- openLink: 'rookie-e2e://signup'
+
+- runFlow:
+    file: ../../../subflows/auth/fill-in-signup-form.yaml
+    env:
+      EMAIL: "newuser@example.com"
+      PASSWORD: ${MAESTRO_E2E_STANDARD_PASSWORD}
+      CONFIRM_PASSWORD: ${MAESTRO_E2E_STANDARD_PASSWORD}
+
+- assertVisible: 'Profile'

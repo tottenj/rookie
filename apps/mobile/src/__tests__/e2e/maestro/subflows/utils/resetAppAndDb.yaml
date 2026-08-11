@@ -1,0 +1,9 @@
+appId: com.jtotssteam.rookie.e2e
+---
+# Reset/reseed Postgres + Firebase first
+- runScript: .maestro/reset-e2e-environment.js
+
+# Then start the app completely clean
+- launchApp:
+    clearState: true
+    clearKeychain: true

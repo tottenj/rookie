@@ -56,6 +56,7 @@ function getEmulatorHost(): string {
 
 const useFirebaseEmulators = process.env.EXPO_PUBLIC_USE_FIREBASE_EMULATORS === 'true';
 
+
 if (useFirebaseEmulators) {
   const globals = globalThis as FirebaseGlobals;
 

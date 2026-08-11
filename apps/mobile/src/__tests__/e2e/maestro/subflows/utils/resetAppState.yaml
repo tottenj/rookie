@@ -1,0 +1,6 @@
+appId: com.jtotssteam.rookie.e2e
+---
+# Then start the app completely clean
+- launchApp:
+    clearState: true
+    clearKeychain: true

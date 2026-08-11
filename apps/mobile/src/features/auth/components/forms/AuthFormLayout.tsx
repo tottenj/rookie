@@ -51,7 +51,7 @@ export default function AuthFormLayout({
           </AppButton>
         )}
 
-        {errorMessage ? <AppParagraph className="text-red-500">{errorMessage}</AppParagraph> : null}
+        {errorMessage ? <AppParagraph id='error-message' className="text-red-500 text-center">{errorMessage}</AppParagraph> : null}
 
         <View className="flex-row items-center justify-center gap-2">
           <Link replace href={linkHref}>

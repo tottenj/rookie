@@ -1,6 +1,7 @@
 import { spawn, spawnSync } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { E2E_USERS } from '@rookie/test-fixtures';
 
 const isCi = process.argv.includes('--ci');
 const isStudio = process.argv.includes('--studio');
@@ -8,6 +9,9 @@ const skipBuild = process.argv.includes('--skip-build');
 
 const E2E_IOS_APP_ID = 'com.jtotssteam.rookie.e2e';
 const MOBILE_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../apps/mobile');
+
+
+
 
 const e2eEnv = {
   ...process.env,
@@ -33,6 +37,17 @@ const mobileE2eEnv = {
   EXPO_PUBLIC_USE_FIREBASE_EMULATORS: 'true',
   EXPO_PUBLIC_FIREBASE_EMULATOR_HOST: '127.0.0.1',
   EXPO_PUBLIC_E2E: 'true',
+};
+
+
+const { standard } = E2E_USERS;
+const maestroEnv = {
+  ...e2eEnv,
+
+  MAESTRO_E2E_STANDARD_EMAIL: standard.email,
+  MAESTRO_E2E_STANDARD_PASSWORD: standard.password,
+  MAESTRO_E2E_STANDARD_USERNAME: standard.username,
+  MAESTRO_E2E_STANDARD_DISPLAY_NAME: standard.displayName,
 };
 
 function run(command, args, env = e2eEnv) {
@@ -288,8 +303,7 @@ function prepareE2eApp() {
 
 function runMaestroSuite() {
   console.log('🚀 Running Maestro E2E suite');
-
-  run('maestro', ['test', 'apps/mobile/src/__tests__/e2e/maestro/flows']);
+  run('maestro', ['test', 'apps/mobile/src/__tests__/e2e/maestro'], maestroEnv);
 }
 
 async function runStudioMode() {

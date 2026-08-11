@@ -1,0 +1,20 @@
+appId: com.jtotssteam.rookie.e2e
+---
+
+- tapOn:
+    id: 'email-input'
+
+- inputText: ${EMAIL}
+
+- hideKeyboard
+
+- tapOn:
+    id: 'password-input'
+
+- inputText: ${PASSWORD}
+
+- hideKeyboard
+
+- tapOn:
+    id: 'submit-button'
+    enabled: true

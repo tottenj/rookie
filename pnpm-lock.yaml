@@ -223,6 +223,9 @@ importers:
 
   .:
     devDependencies:
+      '@rookie/test-fixtures':
+        specifier: workspace:*
+        version: link:packages/test-fixtures
       concurrently:
         specifier: ^10.0.3
         version: 10.0.3

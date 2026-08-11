@@ -1,8 +1,6 @@
 import AppTextField from '@/components/inputs/AppTextField/AppTextField';
 import { Control, Controller, Path } from 'react-hook-form';
 
-const isE2E = process.env.EXPO_PUBLIC_E2E === 'true';
-
 interface HasEmail {
   email: string;
 }
@@ -37,8 +35,8 @@ export default function EmailField<T extends HasEmail>({
             autoCapitalize: 'none',
             autoCorrect: false,
             spellCheck: false,
-            autoComplete: isE2E ? 'off' : 'email',
-            textContentType: isE2E ? 'none' : 'emailAddress',
+            autoComplete: 'email',
+            textContentType: 'emailAddress',
           }}
         />
       )}

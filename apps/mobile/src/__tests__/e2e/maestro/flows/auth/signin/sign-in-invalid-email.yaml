@@ -1,0 +1,17 @@
+appId: com.jtotssteam.rookie.e2e
+onFlowStart:
+  - runFlow:
+      file: ../../../subflows/utils/setup.yaml
+---
+- openLink: 'rookie-e2e://signin'
+- assertVisible: 'Sign In'
+
+#invalid email
+- runFlow:
+    file: ../../../subflows/auth/fill-in-signin-form.yaml
+    env:
+      EMAIL: 'invalidemail'
+      PASSWORD: ${MAESTRO_E2E_STANDARD_PASSWORD}
+
+- assertVisible:
+    text: 'Invalid email address'
