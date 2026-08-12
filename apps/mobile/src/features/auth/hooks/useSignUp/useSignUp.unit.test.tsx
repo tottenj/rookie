@@ -7,8 +7,22 @@ import { mapAuthError } from '@/lib/errors/mapAuthErrors/mapAuthErrors';
 import QueryClientWrapper, { createTestQueryClient } from '../../../../lib/test/utils/QueryClientWrapper';
 import { QueryClient } from '@tanstack/react-query';
 
-jest.mock('@/lib/repositories/authRepository/auth.repository');
-jest.mock('@/lib/repositories/userRepository/UserRepository');
+jest.mock('@/lib/repositories/authRepository/auth.repository', () => ({
+  AuthRepository: {
+    signUp: jest.fn(),
+    signIn: jest.fn(),
+    signOut: jest.fn(),
+  },
+}));
+
+jest.mock('@/lib/repositories/userRepository/UserRepository', () => ({
+  UsersRepository: {
+    create: jest.fn(),
+    getMe: jest.fn(),
+    updateMe: jest.fn(),
+    deleteMe: jest.fn(),
+  },
+}));
 jest.mock('@/lib/errors/mapAuthErrors/mapAuthErrors');
 
 const mockedAuth = AuthRepository as jest.Mocked<typeof AuthRepository>;
@@ -32,13 +46,13 @@ describe('useSignUp', () => {
   it('returns firebaseUser and profile on success', async () => {
     const firebaseUser = { uid: '123', email: validInput.email, delete: jest.fn() };
     mockedAuth.signUp.mockResolvedValue(firebaseUser as any);
-    mockedUsers.create.mockResolvedValue({ uid: '123', email: validInput.email } as any);
+    mockedUsers.create.mockResolvedValue(undefined);
     const { result } = await renderHook(() => useSignUp(), { wrapper: QueryClientWrapper });
     await act(async () => {
       await result.current.signUpAsync(validInput);
     });
     expect(mockedAuth.signUp).toHaveBeenCalledWith({ email: validInput.email, password: validInput.password });
-    expect(mockedUsers.create).toHaveBeenCalledWith({ email: validInput.email });
+    expect(mockedUsers.create).toHaveBeenCalledWith();
     expect(firebaseUser.delete).not.toHaveBeenCalled();
   });
 

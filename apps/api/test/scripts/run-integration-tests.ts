@@ -24,11 +24,15 @@ function runWithEnvironment(command: string, args: string[]): void {
 }
 
 try {
-  run('pnpm', ['run', 'test:integration:setup']);
+  if (!isCi) {
+    run('pnpm', ['run', 'test:integration:setup']);
+  }
 
   runWithEnvironment('prisma', ['migrate', 'deploy']);
 
   runWithEnvironment('pnpm', ['run', 'test:integration:run']);
 } finally {
-  run('pnpm', ['run', 'test:integration:teardown']);
+  if (!isCi) {
+    run('pnpm', ['run', 'test:integration:teardown']);
+  }
 }

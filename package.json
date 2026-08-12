@@ -14,6 +14,7 @@
     "test": "turbo run test",
     "test:unit": "turbo run test:unit",
     "test:integration": "turbo run test:integration",
+    "test:api": "turbo run test:api",
     "test:integration:api": "pnpm --filter @rookie/api run test:integration",
     "test:integration:api:ci": "pnpm --filter @rookie/api run test:integration:ci",
     "test:e2e": "pnpm --filter @rookie/test-fixtures build && node ./scripts/run-e2e.mjs",
