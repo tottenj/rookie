@@ -28,7 +28,7 @@ export default function EmailSignInForm() {
 
   return (
     <AuthFormLayout
-      linkText="Don\'t have an account? Create one"
+      linkText="Don't have an account? Create one"
       linkHref="/(auth)/signup"
       submitButtonLabel="Sign In"
       isLoading={isLoading}

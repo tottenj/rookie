@@ -12,7 +12,6 @@ export function useSignUp() {
       console.log('Firebase user created:', firebaseUser.uid);
       try {
         if (!firebaseUser.email) throw new Error('Firebase user email is null');
-
         await UsersRepository.create();
       } catch (error) {
         console.log('Error creating user profile in backend:', error);

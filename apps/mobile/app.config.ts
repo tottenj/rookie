@@ -7,6 +7,9 @@ const isE2e = variant === 'e2e';
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
+  plugins:[
+    "expo-image"
+  ],
 
   name: isE2e ? 'Rookie E2E' : isDevelopment ? 'Rookie Dev' : 'Rookie',
 
