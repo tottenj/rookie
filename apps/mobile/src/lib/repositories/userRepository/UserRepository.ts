@@ -1,6 +1,6 @@
 // apps/mobile/api/users/users.repository.ts
 import { apiClient } from '../../../../api/client';
-import { AppUser, CreateUser } from '@rookie/shared-types';
+import { AppUser } from '@rookie/shared-types';
 
 export type UpdateUserDto = Partial<{
   displayName: string;

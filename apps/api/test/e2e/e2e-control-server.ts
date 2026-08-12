@@ -1,16 +1,14 @@
-import { createServer } from 'node:http';
+import { createServer, type IncomingMessage, type ServerResponse } from 'node:http';
 
 import { resetAndSeedE2eEnvironment } from './reset-and-seed-e2e-environment';
 
 const HOST = '127.0.0.1';
 const PORT = 3100;
 
-const server = createServer(async (request, response) => {
+async function handleRequest(request: IncomingMessage, response: ServerResponse<IncomingMessage>) {
   if (request.method === 'POST' && request.url === '/reset') {
     try {
       console.log('🧹 Resetting E2E environment');
-
-      console.log("LKSdjfslkjflkjsklfjlsjflkjskljfls")
 
       await resetAndSeedE2eEnvironment();
 
@@ -49,6 +47,10 @@ const server = createServer(async (request, response) => {
 
   response.writeHead(404);
   response.end();
+}
+
+const server = createServer((request, response) => {
+  void handleRequest(request, response);
 });
 
 server.listen(PORT, HOST, () => {

@@ -21,7 +21,7 @@ export default function EmailSignUpForm() {
     },
   });
 
-  const { signUp, isLoading, errorMessage, error } = useSignUp();
+  const { signUp, isLoading, errorMessage } = useSignUp();
   const onSubmit = handleSubmit((data) => {
     console.log('Submitting sign-up form with data:', data);
     signUp(data);
@@ -37,7 +37,7 @@ export default function EmailSignUpForm() {
       onSubmit={onSubmit}
     >
       <AppHeading type="h1">{'Sign Up'}</AppHeading>
-      <EmailField  control={control} errorMessage={errors.email?.message} />
+      <EmailField control={control} errorMessage={errors.email?.message} />
       <PasswordField control={control} errorMessage={errors.password?.message} />
       <PasswordField control={control} name="confirmPassword" errorMessage={errors.confirmPassword?.message} />
     </AuthFormLayout>

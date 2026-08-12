@@ -1,11 +1,10 @@
-import AppHeading from '@/components/ui/text/Heading/AppHeading';
 import { isE2E } from '@/lib/test/constants/isE2e';
-import { FieldError, Input, Label, TextField, Text, Typography } from 'heroui-native';
+import { FieldError, Input, Label, TextField } from 'heroui-native';
 import type { ComponentProps } from 'react';
 
 type AppTextFieldProps = ComponentProps<typeof TextField> & {
   label?: string;
-  error?: string;
+  error?: string | undefined;
   inputProps?: ComponentProps<typeof Input>;
 };
 

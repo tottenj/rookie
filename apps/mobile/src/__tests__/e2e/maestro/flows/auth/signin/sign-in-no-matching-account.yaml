@@ -14,4 +14,4 @@ onFlowStart:
       PASSWORD: 'invalidpassword'
 
 - assertVisible:
-    text: 'Something went wrong. Please try again'
+    text: 'Incorrect email or password.'

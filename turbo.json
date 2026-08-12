@@ -21,6 +21,9 @@
     "test:integration": {
       "dependsOn": ["^test:integration"]
     },
+    "test:api":{
+      "dependsOn": ["^test:api"]
+    },
     "test:integration:api:ci": {
       "cache": false
     },

@@ -12,15 +12,9 @@ export function useSignUp() {
       console.log('Firebase user created:', firebaseUser.uid);
       try {
         if (!firebaseUser.email) throw new Error('Firebase user email is null');
-        
+
         await UsersRepository.create();
       } catch (error) {
-        const useFirebaseEmulators = process.env.EXPO_PUBLIC_USE_FIREBASE_EMULATORS === 'true';
-        console.log("LSKJFLKJDLKJFLSJDLKFJSLFJ")
-        console.log('Firebase emulator config', {
-          useFirebaseEmulators,
-          rawValue: process.env.EXPO_PUBLIC_USE_FIREBASE_EMULATORS,
-        });
         console.log('Error creating user profile in backend:', error);
         await firebaseUser.delete().catch((deleteError) => {
           console.error('Failed to delete Firebase user:', deleteError);

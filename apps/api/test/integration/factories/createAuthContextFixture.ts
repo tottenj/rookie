@@ -1,6 +1,6 @@
-import { FirebasePrincipal } from "../../../src/auth/types/firebase-principal";
-import { Prisma, User, UserStatus } from "../../../src/generated/prisma/client";
-import { createFirebasePrincipalFactory } from "../../factories/auth/firebasePrincipal.factory";
+import { FirebasePrincipal } from '../../../src/auth/types/firebase-principal';
+import { Prisma, User, UserStatus } from '../../../src/generated/prisma/client';
+import { createFirebasePrincipalFactory } from '../../factories/auth/firebasePrincipal.factory';
 
 type PrismaUserCreateClient = {
   user: {

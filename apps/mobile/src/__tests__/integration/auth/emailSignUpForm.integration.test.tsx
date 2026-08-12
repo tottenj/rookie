@@ -4,7 +4,7 @@ import { QueryClient } from '@tanstack/react-query';
 import EmailSignUpForm from '../../../features/auth/components/forms/emailSignUpForm/EmailSignUpForm';
 import { AuthRepository } from '@/lib/repositories/authRepository/auth.repository';
 import { UsersRepository } from '@/lib/repositories/userRepository/UserRepository';
-import { createFirebaseUserFixture, createRookieUserFixture } from '../../../../test/fixtures/user';
+import { createFirebaseUserFixture } from '../../../../test/fixtures/user';
 import { renderWithProviders } from '../../../../test/utils/renderWithProviders';
 
 jest.mock('@/lib/repositories/authRepository/auth.repository', () => ({
@@ -58,10 +58,9 @@ describe('EmailSignUpForm orchestration', () => {
 
   it('creates the Firebase account and backend profile', async () => {
     const firebaseUser = createFirebaseUserFixture();
-    const profile = createRookieUserFixture();
 
     mockAuthRepository.signUp.mockResolvedValue(firebaseUser);
-    mockUsersRepository.create.mockResolvedValue(profile);
+    mockUsersRepository.create.mockResolvedValue(undefined);
 
     ({ queryClient } = await renderWithProviders(<EmailSignUpForm />));
 
@@ -75,9 +74,7 @@ describe('EmailSignUpForm orchestration', () => {
         password: 'Password123!',
       });
 
-      expect(mockUsersRepository.create).toHaveBeenCalledWith({
-        email: 'test@example.com',
-      });
+      expect(mockUsersRepository.create).toHaveBeenCalledWith();
     });
 
     expect(mockAuthRepository.signUp).toHaveBeenCalledTimes(1);
@@ -169,9 +166,7 @@ describe('EmailSignUpForm orchestration', () => {
 
     expect(mockAuthRepository.signUp).toHaveBeenCalledTimes(1);
 
-    expect(mockUsersRepository.create).toHaveBeenCalledWith({
-      email: 'test@example.com',
-    });
+    expect(mockUsersRepository.create).toHaveBeenCalledWith();
 
     expect(mockUsersRepository.create).toHaveBeenCalledTimes(1);
     expect(deleteFirebaseUser).toHaveBeenCalledTimes(1);
@@ -207,9 +202,7 @@ describe('EmailSignUpForm orchestration', () => {
 
     expect(await screen.findByText(/unable|failed|try again/i)).toBeTruthy();
 
-    expect(mockUsersRepository.create).toHaveBeenCalledWith({
-      email: 'test@example.com',
-    });
+    expect(mockUsersRepository.create).toHaveBeenCalledWith();
 
     expect(deleteFirebaseUser).toHaveBeenCalledTimes(1);
 
@@ -230,7 +223,7 @@ describe('EmailSignUpForm orchestration', () => {
         }),
     );
 
-    mockUsersRepository.create.mockResolvedValue(createRookieUserFixture());
+    mockUsersRepository.create.mockResolvedValue(undefined);
 
     ({ queryClient } = await renderWithProviders(<EmailSignUpForm />));
 
@@ -255,9 +248,7 @@ describe('EmailSignUpForm orchestration', () => {
     resolveFirebaseUser!(createFirebaseUserFixture());
 
     await waitFor(() => {
-      expect(mockUsersRepository.create).toHaveBeenCalledWith({
-        email: 'test@example.com',
-      });
+      expect(mockUsersRepository.create).toHaveBeenCalledWith();
       expect(mockUsersRepository.create).toHaveBeenCalledTimes(1);
     });
   });

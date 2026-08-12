@@ -1,44 +1,30 @@
-async function waitForControlServer() {
-  const url = 'http://127.0.0.1:3100/health';
+/* global http */
 
-  console.log("QUERYING FOR HEALTH");
+function waitForControlServer() {
+  const maxAttempts = 60;
 
-  for (let attempt = 0; attempt < 60; attempt += 1) {
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
     try {
-      const response = await fetch(url);
-
+      const response = http.get('http://127.0.0.1:3100/health');
       if (response.ok) {
         return;
       }
-    } catch {
-      // Control server is still starting.
+    } catch (_error) {
+      // control server still starting
     }
-
-    await new Promise((resolve) => setTimeout(resolve, 500));
   }
 
-  throw new Error(`E2E control server is not ready at ${url}`);
+  throw new Error('E2E control server is not ready at http://127.0.0.1:3100/health');
 }
 
-async function resetE2eEnvironment() {
-  console.log("WAITING FOR CONTROL SERVER");
-  await waitForControlServer();
-  
+waitForControlServer();
 
-  const response = await fetch('http://127.0.0.1:3100/reset', {
-    method: 'POST',
-  });
-
-  console.log(response);
-  console.log(await response.text());
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`E2E reset failed: ${response.status} ${errorText}`);
-  }
-}
-
-resetE2eEnvironment().catch((error) => {
-  console.error(error);
-  process.exit(1);
+const resetResponse = http.post('http://127.0.0.1:3100/reset', {
+  body: JSON.stringify({}),
 });
+console.log('Reset status: ' + resetResponse.status);
+console.log(resetResponse.body);
+
+if (!resetResponse.ok) {
+  throw new Error('E2E reset failed: ' + resetResponse.status + ' ' + resetResponse.body);
+}
